@@ -1,0 +1,4 @@
+﻿@if (TempData["alertMessage"] != null)
+{
+    <input type="hidden" id="swalMessage" value="@TempData["alertMessage"]" data-tipomensaje="@TempData["typeMessage"]" />
+}

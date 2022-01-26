@@ -1,0 +1,42 @@
+﻿<!-- sweetalert2 -->
+@*<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>*@
+<script src="~/lib/sweetalert2/dist/sweetalert2.all.js"></script>
+<script>
+    $(function () {
+        var message = $('#swalMessage').val();
+        var typeMessage = $('#swalMessage').data('tipomensaje');
+        if (message != null) {
+            switch (typeMessage) {
+                case "success":
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    break;
+                case "warning":
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    break;
+                case "danger":
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        iconColor: 'red',
+                        title: message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    break;
+            }
+        }
+    });
+
+</script>
