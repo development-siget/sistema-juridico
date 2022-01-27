@@ -20,5 +20,6 @@ namespace Juridico.Models
         public int TipoDocumentoContactoId { get; set; } //dui nit
         public TipoDocumentoContacto TipoDocumentoContacto { get; set; }
 
+
     }
 }

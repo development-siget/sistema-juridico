@@ -21,10 +21,11 @@ namespace Juridico.Models
         public string Direccion { get; set; }
         public string Telefono { get; set; }
         public string Email { get; set; }
-        //public int TipoDocumentoContactoId { get; set; }
-        //public TipoDocumentoContacto TipoDocumentoContacto{ get; set; }
+        
+        public int TipoContactoId { get; set; } // natural o juridico
+        public TipoContacto TipoContacto{ get; set; }
 
-        public int TipoRemitenteId { get; set; }
+        public int TipoRemitenteId { get; set; } // generador , distribuidor etc.
         public TipoContacto TipoRemitente { get; set; }
     }
 }
