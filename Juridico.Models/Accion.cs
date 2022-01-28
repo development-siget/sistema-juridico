@@ -53,6 +53,5 @@ namespace Juridico.Models
         public int ProcesoId { get; set; }
         public Proceso Proceso { get; set; }
 
-        public Proceso ProcesoInicio { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Juridico.Models
 {
-    public class Contacto
+    public class PresentadoPor
     {
         public int Id { get; set; }
 
@@ -16,9 +16,6 @@ namespace Juridico.Models
         public string Direccion { get; set; }
         public string Telefono { get; set; }
         public string Email { get; set; }
-
-        public int TipoDocumentoContactoId { get; set; } //dui nit
-        public TipoDocumentoContacto TipoDocumentoContacto { get; set; }
 
 
     }

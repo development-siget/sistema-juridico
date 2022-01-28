@@ -21,7 +21,7 @@ namespace Juridico.Models
 
         public int TipoArchivoId { get; set; }
 
-        public TipoArchivo TipoArchivo
+        public TipoArchivo TipoArchivo;
 
 
     }

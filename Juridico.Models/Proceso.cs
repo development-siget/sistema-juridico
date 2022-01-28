@@ -28,8 +28,6 @@ namespace Juridico.Models
 
         public int? AccionInicialId { get; set; }
 
-        public Accion AccionInicial { get; set; }
-
         public int? EstadoInicialId { get; set; }
 
         // Relaciones

@@ -15,6 +15,7 @@ using Microsoft.Graph;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using System.Net.Http.Headers;
+using Juridico.Data;
 using Juridico.Graph;
 
 namespace Juridico
@@ -115,21 +116,21 @@ namespace Juridico
             });
 
             // Servicio de conexión con la base de datos
-            /*
-            services.AddDbContext<SAUSIGETDBContext>(options =>
+
+            services.AddDbContext<JuridicoDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<SAUSIGETDBReadContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("SecondConnection")));
-            // Servicio de envío de correos
-            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            //services.AddDbContext<SAUSIGETDBReadContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("SecondConnection")));
+            //// Servicio de envío de correos
+            //services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
-            services.AddHttpContextAccessor();
+            //services.AddHttpContextAccessor();
 
-            services.AddTransient<IMailService, MailService>();
-            services.AddTransient<ICasoService, CasoService>();
-            */
+            //services.AddTransient<IMailService, MailService>();
+            //services.AddTransient<ICasoService, CasoService>();
+
             //
 
 
