@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20220207195925_MigracionInicial.cs" />
+    <Compile Remove="Migrations\20220207195925_MigracionInicial.Designer.cs" />
+    <Compile Remove="Migrations\20220207200655_MigracionInicial.cs" />
+    <Compile Remove="Migrations\20220207200655_MigracionInicial.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="MailKit" Version="2.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="3.1.12" />
@@ -28,6 +35,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

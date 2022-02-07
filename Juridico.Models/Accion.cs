@@ -30,14 +30,14 @@ namespace Juridico.Models
         public string Descripcion { get; set; }
 
         [Required(ErrorMessage = ErrorMessageTypes.Requerido)]
-        [Display(Name = "Estado inicial")]
-        public int EstadoInicialId { get; set; }
-        public Estado EstadoInicial { get; set; }
+        [Display(Name = "Estado actual")]
+        public int EstadoActualId { get; set; }
+        public Estado EstadoActual { get; set; }
 
         [Required(ErrorMessage = ErrorMessageTypes.Requerido)]
-        [Display(Name = "Estado final")]
-        public int EstadoFinalId { get; set; }
-        public Estado EstadoFinal { get; set; }
+        [Display(Name = "Estado siguiente")]
+        public int EstadoSiguienteId { get; set; }
+        public Estado EstadoSiguiente { get; set; }
 
         [Required(ErrorMessage = ErrorMessageTypes.Requerido)]
         [Display(Name = "Archivo obligatorio")]
@@ -47,11 +47,6 @@ namespace Juridico.Models
         [Display(Name = "Tipo Acción")]
         public int TipoAccionId { get; set; }
         public TipoAccion TipoAccion { get; set; }
-
-        [Required(ErrorMessage = ErrorMessageTypes.Requerido)]
-        [Display(Name = "Proceso")]
-        public int ProcesoId { get; set; }
-        public Proceso Proceso { get; set; }
 
     }
 }

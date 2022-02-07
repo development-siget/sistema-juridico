@@ -6,17 +6,16 @@ using System.Text;
 
 namespace Juridico.Models
 {
-    public class PresentadoPor
+    //cd, usb, folder, etc.
+    public class Anexo
     {
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(150)]
+        [Display(Name = "Anexo")]
         public string Nombre { get; set; }
 
-        [MaxLength(300)]
-        public string Direccion { get; set; }
-        public string Telefono { get; set; }
-        public string Email { get; set; }
-
-
+        public ICollection<AnexoCorrespondiencia> AnexoCorrespondiencias { get; set; }
     }
 }

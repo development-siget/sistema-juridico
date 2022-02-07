@@ -15,6 +15,10 @@ namespace Juridico.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = ErrorMessageTypes.Requerido)]
+        [MaxLength(1)]
+        public string Codigo { get; set; }
+
+        [Required(ErrorMessage = ErrorMessageTypes.Requerido)]
         [MaxLength(50)]
         public string Nombre { get; set; }
 
@@ -22,17 +26,9 @@ namespace Juridico.Models
         [MaxLength(140)]
         public string Descripcion { get; set; }
 
-        [Required(ErrorMessage = ErrorMessageTypes.Requerido)]
-        [MaxLength(1)]
-        public string Codigo { get; set; }
-
         public int? AccionInicialId { get; set; }
 
-        public int? EstadoInicialId { get; set; }
-
-        // Relaciones
-        [JsonIgnore]
-        public List<Estado> Estados { get; set; }
+        public ICollection<Estado> Estados { get; set; }
 
     }
 }

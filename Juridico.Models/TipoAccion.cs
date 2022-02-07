@@ -17,6 +17,6 @@ namespace Juridico.Models
         [MaxLength(50)]
         public string Nombre { get; set; }
 
-        public List<Accion> Acciones { get; set; }
+        public ICollection<Accion> Acciones { get; set; }
     }
 }

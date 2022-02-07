@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juridico.Migrations
 {
     [DbContext(typeof(JuridicoDbContext))]
-    [Migration("20220128165244_MigracionInicial")]
+    [Migration("20220207201051_MigracionInicial")]
     partial class MigracionInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,10 +38,10 @@ namespace Juridico.Migrations
                         .HasColumnType("nvarchar(140)")
                         .HasMaxLength(140);
 
-                    b.Property<int>("EstadoFinalId")
+                    b.Property<int>("EstadoActualId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EstadoInicialId")
+                    b.Property<int>("EstadoSiguienteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
@@ -49,46 +49,29 @@ namespace Juridico.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("ProcesoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TipoAccionId")
                         .HasColumnType("int");
 
                     b.Property<bool>("ValidarArchivo")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EstadoFinalId");
+                    b.HasIndex("EstadoActualId");
 
-                    b.HasIndex("EstadoInicialId");
-
-                    b.HasIndex("ProcesoId");
+                    b.HasIndex("EstadoSiguienteId");
 
                     b.HasIndex("TipoAccionId");
 
                     b.ToTable("Acciones");
                 });
 
-            modelBuilder.Entity("Juridico.Models.AccionSolicitada", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("NombreAccion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AccionesSolicitadas");
-                });
-
-            modelBuilder.Entity("Juridico.Models.AnexoDocumento", b =>
+            modelBuilder.Entity("Juridico.Models.Anexo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,9 +83,29 @@ namespace Juridico.Migrations
                         .HasColumnType("nvarchar(150)")
                         .HasMaxLength(150);
 
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
-                    b.ToTable("AnexosDocumento");
+                    b.ToTable("Anexos");
+                });
+
+            modelBuilder.Entity("Juridico.Models.AnexoCorrespondiencia", b =>
+                {
+                    b.Property<int>("AnexoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CorrespondenciaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AnexoId", "CorrespondenciaId");
+
+                    b.HasIndex("CorrespondenciaId");
+
+                    b.ToTable("AnexoCorrespondiencia");
                 });
 
             modelBuilder.Entity("Juridico.Models.Archivo", b =>
@@ -112,10 +115,7 @@ namespace Juridico.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DocumentoEstadoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DocumentoId")
+                    b.Property<int>("HistoricoEstadosId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
@@ -129,26 +129,26 @@ namespace Juridico.Migrations
                     b.Property<int>("TipoArchivoId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DocumentoEstadoId");
-
-                    b.HasIndex("DocumentoId");
+                    b.HasIndex("HistoricoEstadosId");
 
                     b.ToTable("Archivos");
                 });
 
-            modelBuilder.Entity("Juridico.Models.Documento", b =>
+            modelBuilder.Entity("Juridico.Models.Correspondencia", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Anexos")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Correlativo")
+                    b.Property<string>("Codigo")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
@@ -169,13 +169,19 @@ namespace Juridico.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Objeto")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<int>("PersonaPresentoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProcesoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Referencia")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<int>("RegionalId")
                         .HasColumnType("int");
@@ -183,12 +189,16 @@ namespace Juridico.Migrations
                     b.Property<int>("RemitenteId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TipoRemitenteId")
-                        .HasColumnType("int");
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
                     b.HasIndex("EstadoActualId");
+
+                    b.HasIndex("PersonaPresentoId");
 
                     b.HasIndex("ProcesoId");
 
@@ -196,57 +206,22 @@ namespace Juridico.Migrations
 
                     b.HasIndex("RemitenteId");
 
-                    b.HasIndex("TipoRemitenteId");
-
-                    b.ToTable("Documentos");
+                    b.ToTable("Correspondencias");
                 });
 
-            modelBuilder.Entity("Juridico.Models.DocumentoEstado", b =>
+            modelBuilder.Entity("Juridico.Models.CorrespondenciaRequerimiento", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccionId")
+                    b.Property<int>("CorrespondienciaId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Activo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Comentario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<int>("DocumentoId")
+                    b.Property<int>("RequerimientoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EstadoId")
-                        .HasColumnType("int");
+                    b.HasKey("CorrespondienciaId", "RequerimientoId");
 
-                    b.Property<DateTime?>("FechaFin")
-                        .HasColumnType("datetime2");
+                    b.HasIndex("RequerimientoId");
 
-                    b.Property<DateTime>("FechaInicio")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("FechaVencimiento")
-                        .HasColumnType("date");
-
-                    b.Property<string>("UsuarioCreadorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccionId");
-
-                    b.HasIndex("DocumentoId");
-
-                    b.HasIndex("EstadoId");
-
-                    b.ToTable("DocumentosEstados");
+                    b.ToTable("CorrespondenciaRequerimiento");
                 });
 
             modelBuilder.Entity("Juridico.Models.Estado", b =>
@@ -258,8 +233,8 @@ namespace Juridico.Migrations
 
                     b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(5)")
-                        .HasMaxLength(5);
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<int?>("DiasPlazo")
                         .HasColumnType("int");
@@ -275,6 +250,11 @@ namespace Juridico.Migrations
                     b.Property<int>("TipoEstadoId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProcesoId");
@@ -284,29 +264,104 @@ namespace Juridico.Migrations
                     b.ToTable("Estados");
                 });
 
-            modelBuilder.Entity("Juridico.Models.PresentadoPor", b =>
+            modelBuilder.Entity("Juridico.Models.HistoricoEstados", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AccionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ComentarioAccion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<int>("CorrespondenciaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EstadoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("FechaFin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaVencimiento")
+                        .HasColumnType("date");
+
+                    b.Property<string>("NombreUsuarioCreador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccionId");
+
+                    b.HasIndex("CorrespondenciaId");
+
+                    b.HasIndex("EstadoId");
+
+                    b.ToTable("HistoricoEstados");
+                });
+
+            modelBuilder.Entity("Juridico.Models.Persona", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Apellidos")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<string>("Direccion")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Dui")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Nombres")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("OtroDocumento")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Telefono")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
-                    b.ToTable("PresentadoPor");
+                    b.ToTable("Personas");
                 });
 
             modelBuilder.Entity("Juridico.Models.Proceso", b =>
@@ -329,13 +384,15 @@ namespace Juridico.Migrations
                         .HasColumnType("nvarchar(140)")
                         .HasMaxLength(140);
 
-                    b.Property<int?>("EstadoInicialId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
@@ -358,6 +415,11 @@ namespace Juridico.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
@@ -384,24 +446,59 @@ namespace Juridico.Migrations
                         .HasMaxLength(300);
 
                     b.Property<string>("NumeroDocumento")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<int>("TipoContactoId")
+                    b.Property<int>("TipoDocumentoRemitenteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoEntidadId")
                         .HasColumnType("int");
 
                     b.Property<int>("TipoRemitenteId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("TipoContactoId");
+                    b.HasIndex("TipoDocumentoRemitenteId");
+
+                    b.HasIndex("TipoEntidadId");
 
                     b.HasIndex("TipoRemitenteId");
 
                     b.ToTable("Remitentes");
+                });
+
+            modelBuilder.Entity("Juridico.Models.Requerimiento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("NombreAccion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Requerimientos");
                 });
 
             modelBuilder.Entity("Juridico.Models.Sector", b =>
@@ -420,6 +517,11 @@ namespace Juridico.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
@@ -443,6 +545,11 @@ namespace Juridico.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
                     b.ToTable("TiposAccion");
@@ -465,17 +572,49 @@ namespace Juridico.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.HasKey("Id");
 
                     b.ToTable("TiposArchivo");
                 });
 
-            modelBuilder.Entity("Juridico.Models.TipoContacto", b =>
+            modelBuilder.Entity("Juridico.Models.TipoDocumentoRemitente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("NombreDocumentoRemitente")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TipoDocumentoRemitente");
+                });
+
+            modelBuilder.Entity("Juridico.Models.TipoEntidad", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(2)")
+                        .HasMaxLength(2);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -496,11 +635,18 @@ namespace Juridico.Migrations
 
                     b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
@@ -514,10 +660,20 @@ namespace Juridico.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(5)")
+                        .HasMaxLength(5);
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 
@@ -526,21 +682,15 @@ namespace Juridico.Migrations
 
             modelBuilder.Entity("Juridico.Models.Accion", b =>
                 {
-                    b.HasOne("Juridico.Models.Estado", "EstadoFinal")
-                        .WithMany()
-                        .HasForeignKey("EstadoFinalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Juridico.Models.Estado", "EstadoInicial")
-                        .WithMany("Acciones")
-                        .HasForeignKey("EstadoInicialId")
+                    b.HasOne("Juridico.Models.Estado", "EstadoActual")
+                        .WithMany("AccionesEstadoActual")
+                        .HasForeignKey("EstadoActualId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Juridico.Models.Proceso", "Proceso")
+                    b.HasOne("Juridico.Models.Estado", "EstadoSiguiente")
                         .WithMany()
-                        .HasForeignKey("ProcesoId")
+                        .HasForeignKey("EstadoSiguienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -551,22 +701,41 @@ namespace Juridico.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Juridico.Models.Archivo", b =>
+            modelBuilder.Entity("Juridico.Models.AnexoCorrespondiencia", b =>
                 {
-                    b.HasOne("Juridico.Models.DocumentoEstado", null)
-                        .WithMany("Archivos")
-                        .HasForeignKey("DocumentoEstadoId");
+                    b.HasOne("Juridico.Models.Anexo", "Anexo")
+                        .WithMany("AnexoCorrespondiencias")
+                        .HasForeignKey("AnexoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Juridico.Models.Documento", null)
-                        .WithMany("Archivos")
-                        .HasForeignKey("DocumentoId");
+                    b.HasOne("Juridico.Models.Correspondencia", "Correspondencia")
+                        .WithMany("AnexoCorrespondiencias")
+                        .HasForeignKey("CorrespondenciaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Juridico.Models.Documento", b =>
+            modelBuilder.Entity("Juridico.Models.Archivo", b =>
+                {
+                    b.HasOne("Juridico.Models.HistoricoEstados", "HistoricoEstados")
+                        .WithMany("Archivos")
+                        .HasForeignKey("HistoricoEstadosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Juridico.Models.Correspondencia", b =>
                 {
                     b.HasOne("Juridico.Models.Estado", "EstadoActual")
                         .WithMany()
                         .HasForeignKey("EstadoActualId");
+
+                    b.HasOne("Juridico.Models.Persona", "PersonaPresento")
+                        .WithMany("Correspondencias")
+                        .HasForeignKey("PersonaPresentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Juridico.Models.Proceso", "Proceso")
                         .WithMany()
@@ -585,31 +754,19 @@ namespace Juridico.Migrations
                         .HasForeignKey("RemitenteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Juridico.Models.TipoRemitente", "TipoRemitente")
-                        .WithMany()
-                        .HasForeignKey("TipoRemitenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Juridico.Models.DocumentoEstado", b =>
+            modelBuilder.Entity("Juridico.Models.CorrespondenciaRequerimiento", b =>
                 {
-                    b.HasOne("Juridico.Models.Accion", "Accion")
-                        .WithMany()
-                        .HasForeignKey("AccionId")
+                    b.HasOne("Juridico.Models.Correspondencia", "Correspondencia")
+                        .WithMany("CorrespondenciaRequerimientos")
+                        .HasForeignKey("CorrespondienciaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Juridico.Models.Documento", "Documento")
-                        .WithMany("DocumentoEstados")
-                        .HasForeignKey("DocumentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Juridico.Models.Estado", "Estado")
-                        .WithMany()
-                        .HasForeignKey("EstadoId")
+                    b.HasOne("Juridico.Models.Requerimiento", "Requerimiento")
+                        .WithMany("CorrespondenciaRequerimientos")
+                        .HasForeignKey("RequerimientoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -629,15 +786,42 @@ namespace Juridico.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Juridico.Models.Remitente", b =>
+            modelBuilder.Entity("Juridico.Models.HistoricoEstados", b =>
                 {
-                    b.HasOne("Juridico.Models.TipoContacto", "TipoContacto")
+                    b.HasOne("Juridico.Models.Accion", "Accion")
                         .WithMany()
-                        .HasForeignKey("TipoContactoId")
+                        .HasForeignKey("AccionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Juridico.Models.TipoContacto", "TipoRemitente")
+                    b.HasOne("Juridico.Models.Correspondencia", "Correspondencia")
+                        .WithMany("HistoricoEstados")
+                        .HasForeignKey("CorrespondenciaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Juridico.Models.Estado", "Estado")
+                        .WithMany("HistoricoEstados")
+                        .HasForeignKey("EstadoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Juridico.Models.Remitente", b =>
+                {
+                    b.HasOne("Juridico.Models.TipoDocumentoRemitente", "TipoDocumentoRemitente")
+                        .WithMany()
+                        .HasForeignKey("TipoDocumentoRemitenteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Juridico.Models.TipoEntidad", "TipoEntidad")
+                        .WithMany()
+                        .HasForeignKey("TipoEntidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Juridico.Models.TipoRemitente", "TipoRemitente")
                         .WithMany()
                         .HasForeignKey("TipoRemitenteId")
                         .OnDelete(DeleteBehavior.Cascade)

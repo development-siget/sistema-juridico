@@ -6,14 +6,17 @@ using System.Text;
 
 namespace Juridico.Models
 {
-    //cd, usb, folder, etc.
-    public class AnexoDocumento
+    //preparar respuesta, para su informacion, etc.
+    public class Requerimiento
     {
         public int Id { get; set; }
 
         [Required]
         [MaxLength(150)]
-        [Display(Name = "Anexo")]
-        public string Nombre { get; set; }
+        [Display(Name = "Requerimiento solicitado")]
+        public string NombreAccion { get; set; }
+
+        public ICollection<CorrespondenciaRequerimiento> CorrespondenciaRequerimientos { get; set; }
+
     }
 }

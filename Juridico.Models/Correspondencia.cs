@@ -8,20 +8,21 @@ using System.Text;
 namespace Juridico.Models
 {
     //Documentos que ingresan a la institucion
-    public class Documento
+    public class Correspondencia
     {
 
         public int Id { get; set; }
 
         [Required]
         [MaxLength(20)]
-        public string Correlativo { get; set; } // numero de pcdoc
+        public string Codigo { get; set; } // numero de pcdoc
 
+        [MaxLength(20)]
         public string Referencia { get; set; } 
 
+        [Required]
+        [MaxLength(500)]
         public string Objeto { get; set; } //descripcion del documento
-
-        public string Anexos { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime FechaIngreso { get; set; }
@@ -38,23 +39,24 @@ namespace Juridico.Models
 
         public int IngresadoPorId { get; set; } // Id de DatosEmpleado
 
-        public int TipoRemitenteId { get; set; } // generador, comercializador, etc.
-
-        public TipoRemitente TipoRemitente { get; set; }
-
         public int RemitenteId { get; set; } //nombre de la empresa o persona que envia la documentacion
-
         public Remitente Remitente { get; set; }
 
-        public int RegionalId { get; set; }
+        public int PersonaPresentoId { get; set; }
+        public Persona PersonaPresento { get; set; }
 
+        public int RegionalId { get; set; }
         public Regional Regional { get; set; }
 
         public int ProcesoId { get; set; }
         public Proceso Proceso { get; set; }
 
-        public List<DocumentoEstado> DocumentoEstados { get; set; } // estados del documento
+        public List<HistoricoEstados> HistoricoEstados { get; set; } // estados del documento
 
-        public List<Archivo> Archivos { get; set; } //adjuntos
+        public ICollection<AnexoCorrespondiencia> AnexoCorrespondiencias { get; set; }
+
+        public ICollection<CorrespondenciaRequerimiento> CorrespondenciaRequerimientos { get; set; }
+
+
     }
 }

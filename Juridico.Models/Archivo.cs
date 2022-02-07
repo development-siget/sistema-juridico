@@ -23,6 +23,9 @@ namespace Juridico.Models
 
         public TipoArchivo TipoArchivo;
 
+        public int HistoricoEstadosId { get; set; }
+        public HistoricoEstados HistoricoEstados { get; set; }
+
 
     }
 }

@@ -8,15 +8,13 @@ using Newtonsoft.Json;
 namespace Juridico.Models
 {
     //Estados de los documentos
-    public class DocumentoEstado
+    public class HistoricoEstados
     {
         public int Id { get; set; }
-        public int DocumentoId { get; set; }
-
-        public Documento Documento { get; set; }
+        public int CorrespondenciaId { get; set; }
+        public Correspondencia Correspondencia { get; set; }
 
         public int EstadoId { get; set; }
-    
         public Estado Estado { get; set; }
 
         [Required]
@@ -34,17 +32,16 @@ namespace Juridico.Models
         public bool Activo { get; set; }
 
         [Required]
-        [MaxLength(500)]
-        public string Comentario { get; set; }
-
-        [Required]
         public int AccionId { get; set; }
         public Accion Accion { get; set; }
 
         [Required]
-        public string UsuarioCreadorId { get; set; }
+        [MaxLength(500)]
+        public string ComentarioAccion { get; set; }
 
-        //Lista de archivos adjuntos
+        [Required]
+        public string NombreUsuarioCreador { get; set; }
+
         public List<Archivo> Archivos { get; set; }
 
     }

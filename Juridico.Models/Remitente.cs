@@ -15,17 +15,27 @@ namespace Juridico.Models
         [MaxLength(300)]
         [Display(Name = "Nombre Remitente")]
         public string NombreRemitente { get; set; }
+
+        [Required]
         public string NumeroDocumento { get; set; }
+
+        public int TipoDocumentoRemitenteId { get; set; }
+        public TipoDocumentoRemitente TipoDocumentoRemitente { get; set; }
 
         [MaxLength(300)]
         public string Direccion { get; set; }
+
+        [Required]
+        [MaxLength(50)]
         public string Telefono { get; set; }
+
+        [EmailAddress]
         public string Email { get; set; }
         
-        public int TipoContactoId { get; set; } // natural o juridico
-        public TipoContacto TipoContacto{ get; set; }
+        public int TipoEntidadId { get; set; } // natural o juridico
+        public TipoEntidad TipoEntidad { get; set; }
 
         public int TipoRemitenteId { get; set; } // generador , distribuidor etc.
-        public TipoContacto TipoRemitente { get; set; }
+        public TipoRemitente TipoRemitente { get; set; }
     }
 }

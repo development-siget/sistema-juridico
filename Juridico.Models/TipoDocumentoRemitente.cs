@@ -6,14 +6,14 @@ using System.Text;
 
 namespace Juridico.Models
 {
-    public class TipoDocumentoContacto
+    public class TipoDocumentoRemitente
     {
         //DUI, PASAPORTE, NIT
         public int Id { get; set; }
 
         [Required]
         [MaxLength(50)]
-        [Display(Name = "Documento Contacto")]
-        public string NombreDocumentoContacto { get; set; }
+        [Display(Name = "Documento remitente")]
+        public string NombreDocumentoRemitente { get; set; }
     }
 }
