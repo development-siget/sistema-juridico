@@ -11,9 +11,10 @@ namespace Juridico.Models
         //Operador redes comerciales y telecomunicaciones, transmisor, distribuidor, etc.
         public int Id { get; set; }
 
+        /*
         [Required]
         [MaxLength(5)]
-        public string Codigo { get; set; }
+        public string Codigo { get; set; }*/
 
         [Required]
         [MaxLength(250)]

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Juridico.Models.TipoArchivo>
+
+@{
+    ViewData["Title"] = "Tipo Archivo";
+}
+
+
+<!-- Card de herramientas -->
+<div class="row">
+    <div class="col-12">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">Opciones</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <h4>Acciones</h4>
+                <div class="row">
+                    <div class="col-3">
+                        <a asp-action="Create" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nuevo tipo archivo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Lista</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive table-bordered table-striped table-hover">
+
+                <table class="table" id="mainTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Nombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Descripcion)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nombre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                </td>
+                                <td class="text-right">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                    <button type="button" value="@item.Id" data-item="@item.Nombre" class="btn btn-danger btn-delete" title="Eliminar"><i class="fa fa-trash"></i></button>
+                                    <form asp-action="Delete">
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_IndexJSPartial" />
+}
