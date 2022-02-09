@@ -1,0 +1,84 @@
+﻿@model Juridico.Models.Remitente
+
+@{
+    ViewData["Title"] = "Editar Remitente";
+    ViewData["CardTitle"] = "Remitente";
+}
+
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <!-- general form elements -->
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">@ViewBag.CardTitle</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form asp-action="Edit">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="NombreRemitente" class="control-label"></label>
+                        <input asp-for="NombreRemitente" class="form-control" />
+                        <span asp-validation-for="NombreRemitente" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NumeroDocumento" class="control-label"></label>
+                        <input asp-for="NumeroDocumento" class="form-control" />
+                        <span asp-validation-for="NumeroDocumento" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TipoDocumentoRemitenteId" class="control-label"></label>
+                        <select asp-for="TipoDocumentoRemitenteId" class="form-control" asp-items="ViewBag.TipoDocumentoRemitenteId"></select>
+                        <span asp-validation-for="TipoDocumentoRemitenteId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Direccion" class="control-label"></label>
+                        <input asp-for="Direccion" class="form-control" />
+                        <span asp-validation-for="Direccion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Telefono" class="control-label"></label>
+                        <input asp-for="Telefono" class="form-control" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TipoEntidadId" class="control-label"></label>
+                        <select asp-for="TipoEntidadId" class="form-control" asp-items="ViewBag.Nombre"></select>
+                        <span asp-validation-for="TipoEntidadId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TipoRemitenteId" class="control-label"></label>
+                        <select asp-for="TipoRemitenteId" class="form-control" asp-items="ViewBag.TipoRemitenteId"></select>
+                        <span asp-validation-for="TipoRemitenteId" class="text-danger"></span>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-success btn-block"><i class="fa fa-save"></i> Guardar</button>
+                        </div>
+                        <div class="col-4">
+
+                        </div>
+                        <div class="col-4">
+                            <a class="btn btn-default btn-block" asp-action="Index"><i class="fa fa-arrow-left"></i> Regresar</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

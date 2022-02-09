@@ -1,0 +1,86 @@
+﻿@model Juridico.Models.Remitente
+
+@{
+    ViewData["Title"] = "Detalles";
+    ViewData["CardTitle"] = "Remitente";
+}
+
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <!-- general form elements -->
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">@ViewBag.CardTitle</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.NombreRemitente)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.NombreRemitente)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.NumeroDocumento)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.NumeroDocumento)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.TipoDocumentoRemitente)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.TipoDocumentoRemitente.NombreDocumentoRemitente)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Direccion)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Direccion)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Telefono)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Telefono)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.TipoEntidad)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.TipoEntidad.Codigo)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.TipoRemitente)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.TipoRemitente.Nombre)
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-4">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-block btn-flat"><i class="fa fa-edit"></i> Editar</a>
+                    </div>
+                    <div class="col-4">
+
+                    </div>
+                    <div class="col-4">
+                        <a class="btn btn-default btn-block btn-flat" asp-action="Index"><i class="fa fa-arrow-left"></i> Regresar</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
