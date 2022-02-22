@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Juridico.Models.Correspondencia>
+
+@{
+    ViewData["Title"] = "Listado de Correspondencia";
+}
+
+
+<!-- Card de herramientas -->
+<div class="row">
+    <div class="col-12">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">Opciones</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <h4>Acciones</h4>
+                <div class="row">
+                    <div class="col-3">
+                        <a asp-action="Create" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Ingresar Correspondencia</a>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-primary btn-block" id="btnLimpiarFiltros"><i class="fa fa-broom"></i> Limpiar filtros</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+
+        <div class="card">
+            <!-- card-header -->
+            <div class="card-header">
+                <h3 class="card-title">Lista de casos</h3>
+            </div>
+            <!-- /.card-header -->
+
+            <div class="card-body table-responsive">
+
+                <table id="mainTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Codigo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Referencia)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Objeto)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FechaIngreso)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FechaDocumento)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FechaFinalizacion)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EstadoActual)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.IngresadoPorId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Remitente)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PersonaPresento)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Regional)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Proceso)
+                            </th>
+                            <th>
+
+                            </th>
+                            <th>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Codigo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Referencia)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Objeto)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaIngreso)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaDocumento)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaFinalizacion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EstadoActual.Codigo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IngresadoPorId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remitente.NombreRemitente)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PersonaPresento.Apellidos)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Regional.Codigo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Proceso.Codigo)
+                                </td>
+                                <td class="text-right">
+
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary" title="Ver detalles"><i class="fa fa-eye"></i></a>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_IndexJSPartial" />
+    <script>
+
+    </script>
+}

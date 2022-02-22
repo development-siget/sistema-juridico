@@ -7,7 +7,7 @@ namespace Juridico.Data
     {
         public JuridicoDbContext(DbContextOptions<JuridicoDbContext> options) : base(options)
         {
-            
+
         }
 
         // Mapeo de clases para la base de datos
@@ -130,5 +130,7 @@ namespace Juridico.Data
             modelBuilder.Entity<TipoRemitente>().HasQueryFilter(x => EF.Property<bool>(x, "isDeleted") == false);
 
         }
+
+        public DbSet<Juridico.Models.TipoDocumentoRemitente> TipoDocumentoRemitente { get; set; }
     }
 }

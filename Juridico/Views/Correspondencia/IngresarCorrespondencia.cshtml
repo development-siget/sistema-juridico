@@ -1,0 +1,456 @@
+﻿@*@model Juridico.Models.Correspondencia*@
+@model Juridico.ViewModels.CorrespondenciaViewModel
+@*@using Juridico.Helpers;*@
+
+
+@{
+    ViewData["Title"] = "Correspondencia";
+    ViewData["CardTitle"] = "Ingreso Correspondencia";
+}
+
+
+
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <!-- general form elements -->
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">@ViewBag.CardTitle</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form asp-action="IngresarCorrespondencia">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Codigo" class="control-label"></label>
+                                <input asp-for="Codigo" class="form-control" />
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Referencia" class="control-label"></label>
+                                <input asp-for="Referencia" class="form-control" />
+                                <span asp-validation-for="Referencia" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="FechaIngreso" class="control-label"></label>
+                                <input asp-for="FechaIngreso" class="form-control" />
+                                <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="FechaDocumento" class="control-label"></label>
+                                <input asp-for="FechaDocumento" class="form-control" />
+                                <span asp-validation-for="FechaDocumento" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="form-group col-lg-8">
+
+                            <label asp-for="RemitenteId" class="control-label">Remitente</label>
+                            <select asp-for="RemitenteId" class="form-control select2-ajax" style="width: 100%;" asp-items="ViewBag.Remitentes">
+                                <option value="0" selected="selected">Seleccione una opción</option>
+                            </select>
+                            <span asp-validation-for="RemitenteId" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-lg-4 mt-3">
+
+                            @*<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#modal-agregarremitente"><i class="fa fa-exchange-alt"></i> Agregar Remitente</button>*@
+                            @*<a class="btn btn-primary btn-block" asp-controller="Remitentes" asp-action="Create"><i class="fa fa-plus-circle"></i> Nuevo remitente</a>*@
+                            <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal-ingresarremitente"><i class="fa fa-plus-circle"></i> Agregar Remitente</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Remitente</label>
+                                <input disabled id="dc_nombreremitente" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                           <div class="col-lg-12">
+                              <select asp-for="RemitenteId" class="form-control select2" asp-items="ViewBag.Remitentes"></select>
+                              <span asp-validation-for="RemitenteId" class="text-danger"></span>
+                           </div>
+                        </div>*@
+
+                    <div class="row align-items-center">
+                        <div class="form-group col-lg-8">
+                            <label asp-for="PersonaPresentoId" class="control-label">Presentado Por</label>
+                            <select asp-for="PersonaPresentoId" class="form-control select3-ajax" style="width: 100%;" asp-items="ViewBag.Personas">
+                                <option value="0" selected="selected">Seleccione una opción</option>
+                            </select>
+                            <span asp-validation-for="PersonaPresentoId" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-lg-4 mt-3">
+                            @*<a class="btn btn-primary btn-block" asp-controller="Persona" asp-action="Create"><i class="fa fa-plus-circle"></i> Nueva persona</a>*@
+                            <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal-ingresarpersona" data-id="ingresarpersona">
+                            <i class="fa fa-plus-circle"></i> Agregar Persona</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Nombres</label>
+                            <input disabled id="dc_nombres" class="form-control" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Apellidos</label>
+                            <input disabled id="dc_apellidos" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>DUI</label>
+                            <input disabled id="dc_dui" class="form-control" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Otro Documento</label>
+                            <input disabled id="dc_otrodocumento" class="form-control" />
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label asp-for="Objeto" class="control-label"></label>
+                            <textarea asp-for="Objeto" class="form-control"></textarea>
+                            <span asp-validation-for="Objeto" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    @*@foreach (var anexo in ViewBag.Anexos)
+                        {
+                            <div style="padding-right:15px;margin-left:200px">
+                                <input id="@anexo.Id" type="checkbox" name="anexo" value="@anexo.Id" />
+                                <label for="@anexo.Id">
+                                    @anexo.Nombre
+                                </label>
+                            </div>
+                        }*@
+
+
+
+
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-success btn-block"><i class="fa fa-save"></i> Guardar</button>
+                        </div>
+                        <div class="col-4">
+
+                        </div>
+                        <div class="col-4">
+                            <a class="btn btn-default btn-block btn-flat" asp-action="Index"><i class="fa fa-arrow-left"></i> Regresar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Agregar Remitente -->
+<div class="modal fade" id="modal-ingresarremitente">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar Remitente</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="AgregarRemitente" id="formAgregarRemitente">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="Remitente.NombreRemitente" class="control-label">Nombre</label>
+                        <input asp-for="Remitente.NombreRemitente" class="form-control" />
+                        <span asp-validation-for="Remitente.NombreRemitente" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Remitente.TipoDocumentoRemitenteId" class="control-label">Tipo Documento Remitente</label>
+                                <select asp-for="Remitente.TipoDocumentoRemitenteId" class="form-control" asp-items="ViewBag.TipoDocumento"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Remitente.NumeroDocumento" class="control-label">Número de Documento</label>
+                                <input asp-for="Remitente.NumeroDocumento" class="form-control" />
+                                <span asp-validation-for="Remitente.NumeroDocumento" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Remitente.Direccion" class="control-label"></label>
+                        <input asp-for="Remitente.Direccion" class="form-control" />
+                        <span asp-validation-for="Remitente.Direccion" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label asp-for="Remitente.Telefono" class="control-label"></label>
+                            <input asp-for="Remitente.Telefono" class="form-control" />
+                            <span asp-validation-for="Remitente.Telefono" class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            <label asp-for="Remitente.Email" class="control-label"></label>
+                            <input asp-for="Remitente.Email" class="form-control" />
+                            <span asp-validation-for="Remitente.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Remitente.TipoEntidadId" class="control-label">Tipo Persona</label>
+                        <select asp-for="Remitente.TipoEntidadId" class="form-control" asp-items="ViewBag.TipoEntidad">
+                        </select>
+                        <span asp-validation-for="Remitente.TipoEntidadId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Remitente.TipoRemitenteId" class="control-label">Tipo Remitente</label>
+                        <select asp-for="Remitente.TipoRemitenteId" class="form-control" asp-items="ViewBag.TipoRemitente">
+                        </select>
+                        <span asp-validation-for="Remitente.TipoRemitenteId" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Cerrar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle"></i>Agregar Remitente</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<!-- Modal Agregar Persona -->
+<div class="modal fade" id="modal-ingresarpersona">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar Persona</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="AgregarPersona" id="formAgregarPersona">
+                <div class="modal-body">
+                    <input type="hidden" name="PersonaPresentoId" value="@Model.PersonaPresentoId" />
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label asp-for="PersonaPresento.Nombres" class="control-label"></label>
+                                    <input asp-for="PersonaPresento.Nombres" class="form-control" />
+                                    <span asp-validation-for="PersonaPresento.Nombres" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label asp-for="PersonaPresento.Apellidos" class="control-label"></label>
+                                    <input asp-for="PersonaPresento.Apellidos" class="form-control" />
+                                    <span asp-validation-for="PersonaPresento.Apellidos" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label asp-for="PersonaPresento.Dui" class="control-label"></label>
+                                    <input asp-for="PersonaPresento.Dui" class="form-control" />
+                                    <span asp-validation-for="PersonaPresento.Dui" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label asp-for="PersonaPresento.OtroDocumento" class="control-label"></label>
+                                    <input asp-for="PersonaPresento.OtroDocumento" class="form-control" />
+                                    <span asp-validation-for="PersonaPresento.OtroDocumento" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PersonaPresento.Direccion" class="control-label"></label>
+                            <input asp-for="PersonaPresento.Direccion" class="form-control" />
+                            <span asp-validation-for="PersonaPresento.Direccion" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label asp-for="PersonaPresento.Telefono" class="control-label"></label>
+                                    <input asp-for="PersonaPresento.Telefono" class="form-control" />
+                                    <span asp-validation-for="PersonaPresento.Telefono" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label asp-for="PersonaPresento.Email" class="control-label"></label>
+                                    <input asp-for="PersonaPresento.Email" class="form-control" />
+                                    <span asp-validation-for="PersonaPresento.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Cerrar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle"></i>Agregar Persona</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <!-- JasnyBootstrap -->
+    <script src="~/lib/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
+
+
+
+    <script type="text/javascript">
+
+
+        function getRemitente() {
+            var RemitenteId = $("#RemitenteId").val();
+
+            //console.log(RemitenteId);
+
+            $.ajax({
+                url: `/api/Remitentes/Formulario/${RemitenteId}`,
+                contentType: 'application/json',
+
+                type: 'GET',
+                success: function (data) {
+                     console.log(data[0].RemitenteId);
+                     $("#RemitenteId").val(data[0].RemitenteId);
+                    // $("#dc_nombreremitente").val(data[0].RemitenteId);
+                    //  $("#nombreremitente").val(data.nombreremitente); //asigno valor id a textbox
+                    //  $("#dc_nombreremitente").val(data.NombreRemitente);
+
+                },
+                error: function () {
+                    alert('Error de conexión con el servidor.');
+                }
+
+            });
+        }
+
+        function getPersona() {
+
+            console.log("Hello world11!");
+            var PersonaId = $("#PersonaPresentoId").val();
+            console.log("Hello world!");
+            console.log(PersonaId);
+            $.ajax({
+                url: `/api/PresentadoPor/Formulario/${PersonaId}`,
+                contentType: 'application/json',
+                type: 'GET',
+                success: function (data) {
+                   // console.log(data[0].PersonaId);
+                   // $("#PersonaId").val(data[0].PersonaId);
+                    //  $("#nombreremitente").val(data.nombreremitente); //asigno valor id a textbox
+                    $("#dc_nombres").val(data.Nombres);
+                },
+                error: function () {
+                    alert('Error de conexión con el servidor.');
+                }
+            });
+
+        }
+
+        /*
+        $(document).ready(function () {
+            $('#example-getting-started').multiselect();
+        });
+        */
+
+        // Función principal, espera a que el documento esté cargado para ejecutarse.
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+            $('.select2-ajax').select2({
+                ajax: {
+                    url: '/api/Remitentes/Search',
+                    headers: {
+                        'apiKey': 'pYJY2uZ2j0So6OnezzPf9Q'
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+
+            $('.select3-ajax').select2({
+                ajax: {
+                    url: '/api/PresentadoPor/Search',
+                    headers: {
+                        'apiKey': 'pYJY2uZ2j0So6OnezzPf9Q'
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+
+            });
+
+            $("#RemitenteId").on('change', getRemitente);
+
+            if (parseInt($("#RemitenteId").val()) > 0) {
+                getRemitente();
+            }
+
+            $("#PersonaPresentoId").on('change', getPersona);
+
+            if (parseInt($("#PersonaPresentoId").val()) > 0) {
+                var PersonaId = $("#PersonaPresentoId").val();
+                console.log(PersonaId);
+                getPersona();
+            }
+
+           //   $("#ingresarpersona").on('change', function () {
+               // $('.modal-body').load(`/masterdetails/product?id=${$(this).data('id')}`);
+
+
+           //   });
+
+
+        })
+
+
+    </script>
+}

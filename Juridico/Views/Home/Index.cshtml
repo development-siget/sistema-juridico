@@ -1,21 +1,48 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<style>
-   
-    .h_iframe iframe {
-        width: 100%;
-        height: 100%;
-    }
+@{
+    ViewData["Title"] = "Inicio";
+}
 
-    .h_iframe {
-        height: 100%;
-        width: 100%;
-    }
-</style>
+<div class="card card-solid">
+    <div class="card-body pb-0">
+        <div class="row d-flex align-items-stretch">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+            @if (User.Identity.IsAuthenticated)
+            {
+
+                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                    <div class="card bg-light">
+                        <div class="card-header text-muted border-bottom-0">
+
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="row">
+                                <div class="col-5 text-center">
+                                    <img src="~/img/notebook.png" alt="" class="img-circle img-fluid">
+                                </div>
+                                <div class="col-7">
+                                    <h2 class="lead"><b>Ingreso de Correspondencia</b></h2>
+                                    <p class="text-muted text-sm">
+                                        Opción para ingresar la correspondencia institucional.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="text-right">
+                                <a class="btn btn-block btn-block btn-primary" asp-controller="Correspondencia" asp-action="IngresarCorrespondencia">
+                                    <i class="fas fa-chevron-circle-right"></i> Ingresar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+    <!-- /.card-body -->
 </div>
