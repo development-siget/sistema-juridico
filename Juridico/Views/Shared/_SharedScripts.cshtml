@@ -1,0 +1,19 @@
+﻿<script type="text/javascript">
+    //cerrar Modal
+    $("#close").on("click", function () {
+        $('#form-modal .modal-body').html('');
+        $('#form-modal .modal-title').html('');
+        $('#form-modal').modal('hide');
+    });
+
+    //cerrar Modal-lg
+    $("#close-lg").on("click", function () {
+        $('#form-modal-lg .modal-body').html('');
+        $('#form-modal-lg .modal-title').html('');
+        $('#form-modal-lg').modal('hide');
+    });
+
+    $("div").on('click', function () {
+        $('#modal-alerta-1').modal('hide');
+    });
+</script>

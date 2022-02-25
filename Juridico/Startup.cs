@@ -54,6 +54,7 @@ namespace Juridico
                             {
                                 var token = await tokenAcquisition
                                     .GetAccessTokenForUserAsync(GraphConstants.Scopes, user: context.Principal);
+                                   
                                 request.Headers.Authorization =
                                     new AuthenticationHeaderValue("Bearer", token);
                             })

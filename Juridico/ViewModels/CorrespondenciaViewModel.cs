@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Juridico.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace Juridico.ViewModels
 {
@@ -58,6 +61,8 @@ namespace Juridico.ViewModels
 
         public List<Anexo> Anexos { get; set; }
 
+        public List<int?> Id_Anexos { get; set; }
+
         public List<Remitente> Remitentes { get; set; }
 
         public List<Persona> Personas { get; set; }
@@ -66,5 +71,20 @@ namespace Juridico.ViewModels
         public string AnexoNombre { get; set; }
 
         public bool IsChecked { get; set; }
+
+
+        public SelectList DestinatariosSL { get; set; }
+
+        // Guardar datos de Graph
+        public string DisplayNameDestinatario { get; set; }
+        public string DestinatarioId { get; set; }
+
+        public DateTime? FechaVencimiento { get; set; }
+
+        public List<Requerimiento> Requerimientos { get; set; }
+
+        public List<int?> Id_Requerimiento { get; set; }
+
+        public string Comentarios { get; set; }
     }
 }

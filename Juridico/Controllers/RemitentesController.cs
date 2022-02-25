@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Juridico.Data;
 using Juridico.Models;
+using Juridico.Helpers;
 
 namespace Juridico.Controllers
 {
@@ -55,6 +56,60 @@ namespace Juridico.Controllers
             ViewData["TipoRemitenteId"] = new SelectList(_context.TiposRemitente, "Id", "Nombre");
             return View();
         }
+
+        //Get
+        public async Task<IActionResult> AddRemitente(int id = 0)
+        {
+            ViewData["TipoDocumento"] = new SelectList(_context.TipoDocumentoRemitente, "Id", "NombreDocumentoRemitente");
+            ViewData["TipoEntidad"] = new SelectList(_context.TiposContacto, "Id", "Nombre");
+            ViewData["TipoRemitente"] = new SelectList(_context.TiposRemitente, "Id", "Nombre");
+
+            if (id == 0)
+              
+                return View(new Remitente());
+            else
+            {
+                var remitente = await _context.Remitentes.FindAsync(id);
+                if (remitente == null)
+                {
+                    return NotFound();
+                }
+                return View(remitente);
+            }
+            
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddRemitente(int id, [Bind("Id,NombreRemitente,NumeroDocumento,TipoDocumentoRemitenteId,Direccion,Telefono,Email,TipoEntidadId,TipoRemitenteId")] Remitente remitente)
+        {
+            if (ModelState.IsValid)
+            {
+                //Insert
+                //if (id == 0)
+                //{
+                    _context.Add(remitente);
+                    await _context.SaveChangesAsync();
+                //  return RedirectToAction(nameof(IngresarCorrspondencia));
+                //}
+
+                var correspondencia = new Correspondencia();
+                var id_rem = remitente.Id;
+                if (id_rem >= 1)
+                {
+                    if (_context.Remitentes.Any(r => r.Id == id_rem))
+                    {
+                        correspondencia.Remitente = (Remitente)_context.Remitentes
+                            .FirstOrDefault(x => x.Id == id_rem);  
+                    }
+                }
+                TempData["carga"] = "1";
+                return Json(new { isValid = true, html = Url.Action("IngresarCorrespondencia", "Correspondencia", new { id_rem = id_rem })});
+            }
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddRemitente", remitente) });
+        }
+
+
 
         // POST: Remitentes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 

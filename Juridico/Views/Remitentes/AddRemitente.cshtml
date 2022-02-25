@@ -1,0 +1,74 @@
+﻿@model Juridico.Models.Remitente
+
+@{ Layout = null; }
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AddRemitente" enctype="multipart/form-data" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxCreate(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="NombreRemitente" class="control-label">Nombre</label>
+                <input asp-for="NombreRemitente" class="form-control" />
+                <span asp-validation-for="NombreRemitente" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="TipoDocumentoRemitenteId" class="control-label">Tipo Documento Remitente</label>
+                        <select asp-for="TipoDocumentoRemitenteId" class="form-control" asp-items="ViewBag.TipoDocumento"></select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="NumeroDocumento" class="control-label">Número de Documento</label>
+                        <input asp-for="NumeroDocumento" class="form-control" />
+                        <span asp-validation-for="NumeroDocumento" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <label asp-for="Telefono" class="control-label"></label>
+                    <input asp-for="Telefono" class="form-control" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+                <div class="col-lg-6">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoEntidadId" class="control-label">Tipo Persona</label>
+                <select asp-for="TipoEntidadId" class="form-control" asp-items="ViewBag.TipoEntidad">
+                </select>
+                <span asp-validation-for="TipoEntidadId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TipoRemitenteId" class="control-label">Tipo Remitente</label>
+                <select asp-for="TipoRemitenteId" class="form-control" asp-items="ViewBag.TipoRemitente">
+                </select>
+                <span asp-validation-for="TipoRemitenteId" class="text-danger"></span>
+            </div>
+
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Cerrar</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle"></i>Agregar Remitente</button>
+            </div>
+        </form>
+    </div>
+    <!-- /.modal-content -->
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+       <partial name="_SharedScripts" />
+    }

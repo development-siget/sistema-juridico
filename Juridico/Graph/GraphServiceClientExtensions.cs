@@ -2,12 +2,18 @@
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.Graph;
+using System.Threading.Tasks;
+using Microsoft.Graph.Extensions;
+
 
 namespace Juridico.Graph
 {
+
+    
     public static class GraphServiceClientExtensions
     {
 
+       
         public static string GetUserDisplayName(this GraphServiceClient graphServiceClient, string userId)
         {
             var displayName = graphServiceClient.Users[userId].Request().GetAsync().Result.DisplayName;
@@ -38,6 +44,6 @@ namespace Juridico.Graph
             return role;
         }
 
-
+        
     }
 }

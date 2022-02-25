@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Juridico", "Juridico\Juridico.csproj", "{3C691A5B-BF5D-41AD-A4A7-E0D488468D9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Juridico.Models", "Juridico.Models\Juridico.Models.csproj", "{8D11BDB4-772C-4DB5-A317-B026D1A03D12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Juridico.Models", "Juridico.Models\Juridico.Models.csproj", "{8D11BDB4-772C-4DB5-A317-B026D1A03D12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -21,11 +21,11 @@
                 <h4>Acciones</h4>
                 <div class="row">
                     <div class="col-3">
-                        <a asp-action="Create" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Ingresar Correspondencia</a>
+                        <a asp-action="IngresarCorrespondencia" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Ingresar Correspondencia</a>
                     </div>
                     <div class="col-3">
-                        <button type="button" class="btn btn-primary btn-block" id="btnLimpiarFiltros"><i class="fa fa-broom"></i> Limpiar filtros</button>
-                    </div>
+                        @*<button type="button" class="btn btn-primary btn-block" id="btnLimpiarFiltros"><i class="fa fa-broom"></i> Limpiar filtros</button>
+                    </div>*@
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
         <div class="card">
             <!-- card-header -->
             <div class="card-header">
-                <h3 class="card-title">Lista de casos</h3>
+                <h3 class="card-title">Correspondencia Ingresada</h3>
             </div>
             <!-- /.card-header -->
 
@@ -77,12 +77,12 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.PersonaPresento)
                             </th>
-                            <th>
+                            @*<th>
                                 @Html.DisplayNameFor(model => model.Regional)
-                            </th>
-                            <th>
+                            </th>*@
+                            @*<th>
                                 @Html.DisplayNameFor(model => model.Proceso)
-                            </th>
+                            </th>*@
                             <th>
 
                             </th>
@@ -125,15 +125,15 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.PersonaPresento.Apellidos)
                                 </td>
-                                <td>
+                                @*<td>
                                     @Html.DisplayFor(modelItem => item.Regional.Codigo)
-                                </td>
-                                <td>
+                                </td>*@
+                                @*<td>
                                     @Html.DisplayFor(modelItem => item.Proceso.Codigo)
-                                </td>
+                                </td>*@
                                 <td class="text-right">
 
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary" title="Ver detalles"><i class="fa fa-eye"></i></a>
+                                    <a asp-action="Marginar" asp-route-id="@item.Id" class="btn btn-primary" title="Ver detalle"><i class="fa fa-eye"></i></a>
                                 </td>
                                 <td>
                                 </td>
