@@ -85,10 +85,10 @@ namespace Juridico.Controllers
                 Mail =u.Mail,
             });*/
 
-            //  var listdestinatarios = GetAllUser(null, null);
+            // var listdestinatarios = GetAllUser(null, null);
 
            // var usuarios = _graphServiceClient.GetUserList().ToList();
-            // ViewData["Usuarios"] = new SelectList(usuarios, "Id", "Nombre");
+           //  ViewData["Usuarios"] = new SelectList(usuarios, "Id", "Nombre");
 
 
             return View(correspondenciavm);

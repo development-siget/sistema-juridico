@@ -1,5 +1,4 @@
-﻿@*@model Juridico.Models.Correspondencia*@
-@model Juridico.ViewModels.CorrespondenciaViewModel
+﻿@model Juridico.ViewModels.CorrespondenciaViewModel
 @*@using Juridico.Helpers;*@
 
 
@@ -67,10 +66,6 @@
 
                         </div>
                         <div class="col-lg-4 mt-3">
-
-                            @*<button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#modal-agregarremitente"><i class="fa fa-exchange-alt"></i> Agregar Remitente</button>*@
-                            @*<a class="btn btn-primary btn-block" asp-controller="Remitentes" asp-action="Create"><i class="fa fa-plus-circle"></i> Nuevo remitente</a>*@
-                            @*<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal-ingresarremitente"><i class="fa fa-plus-circle"></i> Agregar Remitente</button>*@
                             <a onclick="showInPopupLg('@Url.Action("AddRemitente","Remitentes",null,Context.Request.Scheme)','Nuevo Remitente')" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nuevo Remitente</a>
                         </div>
                     </div>
@@ -82,13 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    @*<div class="row">
-           <div class="col-lg-12">
-              <select asp-for="RemitenteId" class="form-control select2" asp-items="ViewBag.Remitentes"></select>
-              <span asp-validation-for="RemitenteId" class="text-danger"></span>
-           </div>
-        </div>*@
-
+                 
                     <div class="row align-items-center">
                         <div class="form-group col-lg-8">
                             <label asp-for="PersonaPresentoId" class="control-label">Presentado Por</label>
@@ -99,10 +88,7 @@
 
                         </div>
                         <div class="col-lg-4 mt-3">
-                            @*<a class="btn btn-primary btn-block" asp-controller="Persona" asp-action="Create"><i class="fa fa-plus-circle"></i> Nueva persona</a>*@
-                            <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal-ingresarpersona" data-id="ingresarpersona">
-                                <i class="fa fa-plus-circle"></i> Agregar Persona
-                            </button>
+                            <a onclick="showInPopupLg('@Url.Action("AddPersona","Persona",null,Context.Request.Scheme)','Nueva Persona')" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nueva Persona</a>
                         </div>
                     </div>
                     <div class="row">
@@ -134,15 +120,7 @@
                         </div>
                     </div>
 
-                    @*@foreach (var anexo in ViewBag.Anexos)
-        {
-            <div style="padding-right:15px;margin-left:200px">
-                <input id="@anexo.Id" type="checkbox" name="anexo" value="@anexo.Id" />
-                <label for="@anexo.Id">
-                    @anexo.Nombre
-                </label>
-            </div>
-        }*@
+                   
                     <div class="row">
                         <div class="col-lg-12">
 
@@ -199,165 +177,6 @@
 </div>
 
 
-<!-- Modal Agregar Remitente -->
-<div class="modal fade" id="modal-ingresarremitente">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Agregar Remitente</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form asp-action="AgregarRemitente" id="formAgregarRemitente">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label asp-for="Remitente.NombreRemitente" class="control-label">Nombre</label>
-                        <input asp-for="Remitente.NombreRemitente" class="form-control" />
-                        <span asp-validation-for="Remitente.NombreRemitente" class="text-danger"></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label asp-for="Remitente.TipoDocumentoRemitenteId" class="control-label">Tipo Documento Remitente</label>
-                                <select asp-for="Remitente.TipoDocumentoRemitenteId" class="form-control" asp-items="ViewBag.TipoDocumento"></select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label asp-for="Remitente.NumeroDocumento" class="control-label">Número de Documento</label>
-                                <input asp-for="Remitente.NumeroDocumento" class="form-control" />
-                                <span asp-validation-for="Remitente.NumeroDocumento" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Remitente.Direccion" class="control-label"></label>
-                        <input asp-for="Remitente.Direccion" class="form-control" />
-                        <span asp-validation-for="Remitente.Direccion" class="text-danger"></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <label asp-for="Remitente.Telefono" class="control-label"></label>
-                            <input asp-for="Remitente.Telefono" class="form-control" />
-                            <span asp-validation-for="Remitente.Telefono" class="text-danger"></span>
-                        </div>
-                        <div class="col-lg-6">
-                            <label asp-for="Remitente.Email" class="control-label"></label>
-                            <input asp-for="Remitente.Email" class="form-control" />
-                            <span asp-validation-for="Remitente.Email" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Remitente.TipoEntidadId" class="control-label">Tipo Persona</label>
-                        <select asp-for="Remitente.TipoEntidadId" class="form-control" asp-items="ViewBag.TipoEntidad">
-                        </select>
-                        <span asp-validation-for="Remitente.TipoEntidadId" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Remitente.TipoRemitenteId" class="control-label">Tipo Remitente</label>
-                        <select asp-for="Remitente.TipoRemitenteId" class="form-control" asp-items="ViewBag.TipoRemitente">
-                        </select>
-                        <span asp-validation-for="Remitente.TipoRemitenteId" class="text-danger"></span>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Cerrar</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle"></i>Agregar Remitente</button>
-                </div>
-            </form>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-
-
-<!-- Modal Agregar Persona -->
-<div class="modal fade" id="modal-ingresarpersona">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Agregar Persona</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form asp-action="AgregarPersona" id="formAgregarPersona">
-                <div class="modal-body">
-                    <input type="hidden" name="PersonaPresentoId" value="@Model.PersonaPresentoId" />
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label asp-for="PersonaPresento.Nombres" class="control-label"></label>
-                                    <input asp-for="PersonaPresento.Nombres" class="form-control" />
-                                    <span asp-validation-for="PersonaPresento.Nombres" class="text-danger"></span>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label asp-for="PersonaPresento.Apellidos" class="control-label"></label>
-                                    <input asp-for="PersonaPresento.Apellidos" class="form-control" />
-                                    <span asp-validation-for="PersonaPresento.Apellidos" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label asp-for="PersonaPresento.Dui" class="control-label"></label>
-                                    <input asp-for="PersonaPresento.Dui" class="form-control" />
-                                    <span asp-validation-for="PersonaPresento.Dui" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label asp-for="PersonaPresento.OtroDocumento" class="control-label"></label>
-                                    <input asp-for="PersonaPresento.OtroDocumento" class="form-control" />
-                                    <span asp-validation-for="PersonaPresento.OtroDocumento" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="PersonaPresento.Direccion" class="control-label"></label>
-                            <input asp-for="PersonaPresento.Direccion" class="form-control" />
-                            <span asp-validation-for="PersonaPresento.Direccion" class="text-danger"></span>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label asp-for="PersonaPresento.Telefono" class="control-label"></label>
-                                    <input asp-for="PersonaPresento.Telefono" class="form-control" />
-                                    <span asp-validation-for="PersonaPresento.Telefono" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label asp-for="PersonaPresento.Email" class="control-label"></label>
-                                    <input asp-for="PersonaPresento.Email" class="form-control" />
-                                    <span asp-validation-for="PersonaPresento.Email" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Cerrar</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-check-circle"></i>Agregar Persona</button>
-                </div>
-            </form>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
 
 
 
