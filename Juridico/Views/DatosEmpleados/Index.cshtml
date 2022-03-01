@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Juridico.Models.TipoEstado>
+﻿@model IEnumerable<Juridico.Models.DatosEmpleado>
 
 @{
-    ViewData["Title"] = "Tipo Estado";
+    ViewData["Title"] = "Datos Empleados";
 }
 
 
@@ -21,13 +21,14 @@
                 <h4>Acciones</h4>
                 <div class="row">
                     <div class="col-3">
-                        <a asp-action="Create" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nuevo tipo de estado</a>
+                        <a asp-action="Create" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nuevo datos empleado</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 
 <div class="row">
@@ -37,15 +38,28 @@
                 <h3 class="card-title">Lista</h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive table-bordered table-striped table-hover">
-                <table class="table" id="mainTable">
+            <div class="card-body table-responsive">
+                <table id="mainTable" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Codigo)
+                                Usuario
+                                @*@Html.DisplayNameFor(model => model.UserId)*@
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Nombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Rol)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Regional)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Activo)
                             </th>
                             <th></th>
                         </tr>
@@ -55,17 +69,26 @@
                         {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Codigo)
+                                @Html.DisplayFor(modelItem => item.UserId)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Nombre)
                             </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Rol.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Regional.Codigo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Activo)
+                            </td>
                             <td class="text-right">
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit"></i></a>
                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-default"><i class="fa fa-eye"></i></a>
-                                @*<button type="button" value="@item.Id" data-item="@item.Nombre" class="btn btn-danger btn-delete" title="Eliminar"><i class="fa fa-trash"></i></button>
-                                <form asp-action="Delete">
-                                </form>*@
                             </td>
                         </tr>
                         }
@@ -77,6 +100,7 @@
         <!-- /.card -->
     </div>
 </div>
+
 
 @section Scripts
 {

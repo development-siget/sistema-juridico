@@ -1,0 +1,92 @@
+﻿@model Juridico.Models.DatosEmpleado
+
+@{
+    ViewData["Title"] = "Editar Empleado";
+    ViewData["CardTitle"] = "Datos Empleado";
+}
+
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">@ViewBag.CardTitle</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form asp-action="Edit">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="UserId" class="control-label">Usuario</label>
+                        <select asp-for="UserId" class="form-control select2" asp-items="ViewBag.Usuarios">
+                            <option value="0">Seleccione una opción</option>
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="control-label"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="RolId" class="control-label">Rol</label>
+                        <select asp-for="RolId" class="form-control select2" asp-items="ViewBag.Roles">
+                            <option value="0">Seleccione una opción</option>
+                        </select>
+                        <span asp-validation-for="RolId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="RegionalId" class="control-label">Regional</label>
+                        <select asp-for="RegionalId" class="form-control select2" asp-items="ViewBag.Regionales">
+                            <option value="0">Seleccione una opción</option>
+                        </select>
+                        <span asp-validation-for="RegionalId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Activo" class="control-label"></label>
+                        <div class="form-group clearfix">
+                            <div class="icheck-primary d-inline">
+                                <input asp-for="Activo" />
+                                <label for="Activo">Empleado activo</label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Activo" class="text-danger"></span>
+                    </div>
+                </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-success btn-block btn-flat"><i class="fa fa-save"></i> Guardar</button>
+                            </div>
+                            <div class="col-4">
+
+                            </div>
+                            <div class="col-4">
+                                <a class="btn btn-default btn-block btn-flat" asp-action="Index"><i class="fa fa-arrow-left"></i> Regresar</a>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script>
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+        });
+    </script>
+}

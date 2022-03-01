@@ -1,0 +1,76 @@
+﻿@model Juridico.Models.DatosEmpleado
+
+@{
+    ViewData["Title"] = "Detalles";
+    ViewData["CardTitle"] = "Empleados";
+}
+
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <!-- general form elements -->
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">@ViewBag.CardTitle</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <dl>
+                    <dt class="col-sm-2">
+                        Usuario
+                        @*@Html.DisplayNameFor(model => model.UserId)*@
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.UserId)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Nombre)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Rol)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Rol.Nombre)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Regional)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Regional.Nombre)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Activo)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Activo)
+                    </dd>
+                </dl>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-4">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-block btn-flat"><i class="fa fa-edit"></i> Editar</a>
+                    </div>
+                    <div class="col-4">
+
+                    </div>
+                    <div class="col-4">
+                        <a class="btn btn-default btn-block btn-flat" asp-action="Index"><i class="fa fa-arrow-left"></i> Regresar</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- /.card -->
+    </div>
+</div>

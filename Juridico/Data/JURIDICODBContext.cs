@@ -28,6 +28,9 @@ namespace Juridico.Data
         public DbSet<TipoEntidad> TiposContacto { get; set; }
         public DbSet<TipoEstado> TiposEstado { get; set; }
         public DbSet<TipoRemitente> TiposRemitente { get; set; }
+        public DbSet<DatosEmpleado> DatosEmpleados { get; set; }
+        public DbSet<EstadosRoles> EstadosRoles { get; set; }
+        public DbSet<Rol> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -128,6 +131,30 @@ namespace Juridico.Data
             // TiposRemitente
             modelBuilder.Entity<TipoRemitente>().Property<bool>("isDeleted").HasDefaultValue(false);
             modelBuilder.Entity<TipoRemitente>().HasQueryFilter(x => EF.Property<bool>(x, "isDeleted") == false);
+
+
+            // Tabla: Roles
+            modelBuilder.Entity<Rol>().Property<bool>("isDeleted").HasDefaultValue(false);
+            modelBuilder.Entity<Rol>().HasQueryFilter(x => EF.Property<bool>(x, "isDeleted") == false);
+
+            // Tabla: DatosEmpleados
+            modelBuilder.Entity<DatosEmpleado>().Property<bool>("isDeleted").HasDefaultValue(false);
+            modelBuilder.Entity<DatosEmpleado>().HasQueryFilter(x => EF.Property<bool>(x, "isDeleted") == false);
+
+            // Tabla: EstadosRoles
+
+            modelBuilder.Entity<EstadosRoles>()
+                .HasKey(er => new { er.EstadoId, er.RolId });
+            modelBuilder.Entity<EstadosRoles>()
+                .HasOne(er => er.Estado)
+                .WithMany(e => e.Roles)
+                .HasForeignKey(er => er.EstadoId);
+            modelBuilder.Entity<EstadosRoles>()
+                .HasOne(er => er.Rol)
+                .WithMany(r => r.Estados)
+                .HasForeignKey(er => er.RolId);
+            modelBuilder.Entity<EstadosRoles>().Property<bool>("isDeleted").HasDefaultValue(false);
+            modelBuilder.Entity<EstadosRoles>().HasQueryFilter(x => EF.Property<bool>(x, "isDeleted") == false);
 
         }
 

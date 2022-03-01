@@ -1,9 +1,8 @@
-﻿@model IEnumerable<Juridico.Models.Proceso>
+﻿@model IEnumerable<Juridico.Models.Rol>
 
 @{
-    ViewData["Title"] = "Proceso";
+    ViewData["Title"] = "Roles";
 }
-
 
 <!-- Card de herramientas -->
 <div class="row">
@@ -21,7 +20,7 @@
                 <h4>Acciones</h4>
                 <div class="row">
                     <div class="col-3">
-                        <a asp-action="Create" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nuevo Proceso</a>
+                        <a asp-action="Create" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nuevo Rol</a>
                     </div>
                 </div>
             </div>
@@ -42,16 +41,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Codigo)
-                            </th>
-                            <th>
                                 @Html.DisplayNameFor(model => model.Nombre)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Descripcion)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.AccionInicialId)
                             </th>
                             <th></th>
                         </tr>
@@ -61,20 +51,11 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Codigo)
-                                </td>
-                                <td>
                                     @Html.DisplayFor(modelItem => item.Nombre)
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Descripcion)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.AccionInicialId)
-                                </td>
                                 <td class="text-right">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit"></i></a>
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Editar"><i class="fa fa-edit"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-default" title="Detalle"><i class="fa fa-eye"></i></a>
                                     @*<button type="button" value="@item.Id" data-item="@item.Nombre" class="btn btn-danger btn-delete" title="Eliminar"><i class="fa fa-trash"></i></button>
                                     <form asp-action="Delete">
                                     </form>*@
@@ -89,6 +70,7 @@
         <!-- /.card -->
     </div>
 </div>
+
 
 @section Scripts
 {

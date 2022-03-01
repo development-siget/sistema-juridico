@@ -39,6 +39,9 @@ namespace Juridico.Models
 
         public ICollection<HistoricoEstados> HistoricoEstados { get; set; }
 
+        [DisplayName("Roles involucrados")]
+        public List<EstadosRoles> Roles { get; set; }
+
     }
 }
 
