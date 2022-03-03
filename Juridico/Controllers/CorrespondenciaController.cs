@@ -15,6 +15,10 @@ using AutoMapper;
 using Microsoft.Graph;
 using Juridico.Graph;
 using Juridico.Tools;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Juridico.Extensions;
+using Juridico.Utilities; 
 
 namespace Juridico.Controllers
 {
@@ -23,12 +27,14 @@ namespace Juridico.Controllers
         private readonly JuridicoDbContext _context;
         private readonly IMapper _mapper;
         private readonly GraphServiceClient _graphServiceClient;
+        private readonly ClaimsPrincipal _user;
 
-        public CorrespondenciaController(JuridicoDbContext context, IMapper mapper, GraphServiceClient graphServiceClient)
+        public CorrespondenciaController(JuridicoDbContext context, IMapper mapper, GraphServiceClient graphServiceClient, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _mapper = mapper;
             _graphServiceClient = graphServiceClient;
+            _user = httpContextAccessor.HttpContext.User;
 
         }
 
@@ -228,21 +234,6 @@ namespace Juridico.Controllers
 
             return View(correspondenciavm);
 
-
-        }
-
-
-
-
-
-        public IActionResult Prueba()
-        {
-            //var anexos = _context.Anexos.ToList();
-            //return View(anexos);
-
-
-            ViewData["Anexos"] = new SelectList(_context.Anexos, "Id", "Nombre");
-            return View();
         }
 
 
@@ -254,9 +245,11 @@ namespace Juridico.Controllers
             var correspondenciavm = new CorrespondenciaViewModel
             {
                 FechaIngreso = DateTime.Now,
+                FechaDocumento = DateTime.Now,
                 //Anexos = anexosvm,
                 //Remitentes = remitentesvm,
                 //Personas = personas,
+                
             };
 
             // var remi = await _context.Remitentes.FindAsync(RemitenteId);
@@ -277,6 +270,7 @@ namespace Juridico.Controllers
                 correspondenciavm.PersonaPresentoId = PersonaPresentoId.Value;
                 
             }
+            correspondenciavm.Codigo = GenerarCorrelativoInicial();
 
            // GetUltimaPersona();
 
@@ -298,6 +292,14 @@ namespace Juridico.Controllers
             var correlativoCadenaTexto = correlativo.ToString().PadLeft(4, '0');
 
             return anioactual.ToString() + "-" + correlativoCadenaTexto;
+
+        }
+
+
+        private string GenerarCorrelativoInicial()
+        {
+            var anioactual = DateTime.Now.Year;
+            return anioactual + "-#####";
 
         }
 
@@ -387,20 +389,7 @@ namespace Juridico.Controllers
             ViewData["TipoDocumento"] = new SelectList(_context.TipoDocumentoRemitente, "Id", "NombreDocumentoRemitente");
 
         }
-
-        private void GetUltimaPersona() 
-        {
-            var personas = _context.Personas.Select(x => new Persona
-            {
-                Id = x.Id,
-                Nombres = $"{x.Dui} - {x.Nombres} {x.Apellidos}"
-            }).OrderByDescending(x=>x.Id).Take(1);
-
-            ViewData["Personas"] = new SelectList(personas, "Id", "Nombres");
-        }
-
-
-
+     
         // POST: Correspondencia/IngresarCorrespondencia
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -408,20 +397,93 @@ namespace Juridico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IngresarCorrespondencia(CorrespondenciaViewModel correspondenciavm)
         {
-            //[Bind("Id,Codigo,Referencia,Objeto,FechaIngreso,FechaDocumento,FechaFinalizacion,EstadoActualId,IngresadoPorId,RemitenteId,PersonaPresentoId,RegionalId,ProcesoId")]
+           
+
+            var proceso = _context.Procesos.AsNoTracking().First(p => p.Codigo == "M"); //flujo de marginacion
+
+            correspondenciavm.Codigo = GenerarCorrelativo();
+
             if (ModelState.IsValid)
             {
-                _context.Add(correspondenciavm);
-                await _context.SaveChangesAsync();
+
+                //correspondenciavm.Codigo = GenerarCorrelativo();
+                correspondenciavm.FechaIngreso = DateTime.Now;
+
+                // Asignar quien recibira la correspondencia
+
+                // Si el usuario está logueado guardar el id de empleado
+                if (_user.Identity.IsAuthenticated)
+                {
+                   // var empleadoId = _context.DatosEmpleados.FirstOrDefault(de => de.UserId.Equals(_user.GetUserGraphId()))?.Id;
+                   // correspondenciavm.IngresadoPorId = empleadoId;
+                }
+                else
+                {
+                    correspondenciavm.IngresadoPorId = 0;
+                }
+
+            // Envío de email 
+
+            // Envío de email a persona que marginara la correspondencia
+
+            var correspond = new Correspondencia
+            {
+                Codigo = correspondenciavm.Codigo,
+                Referencia = correspondenciavm.Referencia,
+                Objeto= correspondenciavm.Objeto,
+                FechaIngreso = correspondenciavm.FechaIngreso,
+                FechaDocumento = correspondenciavm.FechaDocumento,
+                RemitenteId = correspondenciavm.RemitenteId,
+                PersonaPresentoId = correspondenciavm.PersonaPresentoId,
+                RegionalId = 1,
+                ProcesoId = proceso.Id,
+                EstadoActualId =1,
+                IngresadoPorId = 1,
+
+            };
+                   //_mapper.Map<Correspondencia>(correspondenciavm);
+                _context.Add(correspond);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error al guardar el caso en la base de datos");
+                }
+
+            var accionInicial = _context.Acciones.FirstOrDefault(x => x.Id == proceso.AccionInicialId);
+
+                if (accionInicial != null)
+                {
+                    var accionCorrespondenciaInicial = new AccionCorrespondenciaViewModel()
+                    {
+                        AccionId = accionInicial.Id,
+                        CorrespondenciaId= correspond.Id,
+                        Comentario = "El correspondencia fue ingresada correctamente",
+                        EstadoActualId = accionInicial.EstadoActualId,
+                        EstadoSiguientId = accionInicial.EstadoSiguienteId,
+                        
+                    };
+                    //intertar estado
+                    InsertarEstado(accionCorrespondenciaInicial);
+
+                }
+                else
+                {
+                    throw new Exception($"Error, no esta configurado la acción inicial del proceso");
+                }
+
+                //Enviar aqui el mail para la persona a quien se marginara (asignacion)
+
+
+                // Mensaje de éxito de caso ingresado
+                TempData.AlertSuccessMessage(CommonMessages.DatosGuardadosExitosamente);
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["EstadoActualId"] = new SelectList(_context.Estados, "Id", "Codigo", correspondenciavm.EstadoActualId);
-            ViewData["PersonaPresentoId"] = new SelectList(_context.Personas, "Id", "Apellidos", correspondenciavm.PersonaPresentoId);
-            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "Id", "Codigo", correspondenciavm.ProcesoId);
-            ViewData["RegionalId"] = new SelectList(_context.Regionales, "Id", "Codigo", correspondenciavm.RegionalId);
-            ViewData["RemitenteId"] = new SelectList(_context.Remitentes, "Id", "NombreRemitente", correspondenciavm.RemitenteId);
-
-
+           }
+          
+            CargarDatos(null, null);
             return View(correspondenciavm);
         }
 
@@ -585,7 +647,6 @@ namespace Juridico.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public IActionResult AgregarPersona(CorrespondenciaViewModel correspondenciavm)
         public IActionResult AgregarPersona(CorrespondenciaViewModel correspondenciavm)
         {
             //if (ModelState.IsValid)
@@ -609,41 +670,17 @@ namespace Juridico.Controllers
                     Email = correspondenciavm.PersonaPresento.Email,
                 };
 
-            
-          
-            //  var datosPersona= _mapper.Map<Persona>(personavm);
                 _context.Personas.Add(datosPersona);
                 _context.SaveChanges();
 
                 correspondenciavm.PersonaPresentoId = datosPersona.Id;
                 return RedirectToAction(nameof(IngresarCorrespondencia), new { id = datosPersona.Id });
-            //}
-            //V= correspondenciavm.PersonaPresentoId = correspondenciavm.PersonaPresento.Id
-           // return View(correspondenciavm);
+          
         }
 
-            /*
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> AgregarRemitente([Bind("Id,NombreRemitente,NumeroDocumento,TipoDocumentoRemitenteId,Direccion,Telefono,Email,TipoEntidadId,TipoRemitenteId")] Remitente remitente)
-            {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(remitente);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                ViewData["TipoDocumentoRemitenteId"] = new SelectList(_context.TipoDocumentoRemitente, "Id", "NombreDocumentoRemitente", remitente.TipoDocumentoRemitenteId);
-                ViewData["TipoEntidadId"] = new SelectList(_context.TiposContacto, "Id", "Nombre", remitente.TipoEntidadId);
-                ViewData["TipoRemitenteId"] = new SelectList(_context.TiposRemitente, "Id", "Nombre", remitente.TipoRemitenteId);
-                //return View(remitente);
-                return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AgregarRemitente", remitente) });
-            }
-            */
 
             public JsonResult GetRemitente(string remitente)
-        {
-
+            {
             var remitenteslist = _context.Remitentes.ToList();
 
             //si parametro tiene dato
@@ -652,12 +689,58 @@ namespace Juridico.Controllers
                 //busco dato filtrado
                 remitenteslist = _context.Remitentes.Where(x => x.NombreRemitente.Contains(remitente)).ToList();
 
-
             }
 
             return Json(remitenteslist);
+            }
+
+           public bool InsertarEstado(AccionCorrespondenciaViewModel accionCorrespondenciavm)
+           {
+            var accion = _context.Acciones
+                  .FirstOrDefault(x => x.Id == accionCorrespondenciavm.AccionId);
+
+            var correspondencia = _context.Correspondencias
+                  .FirstOrDefault(c => c.Id == accionCorrespondenciavm.CorrespondenciaId);
+
+            var estadonuevo = _context.Estados.FirstOrDefault(x => x.Id == accion.EstadoSiguienteId); //deberia de ser estado =2
+            var correspondenciaEstadoAnterior = _context.HistoricoEstados
+                .FirstOrDefault(h => h.CorrespondenciaId == correspondencia.Id && h.Activo);
+            if (correspondenciaEstadoAnterior != null)
+            {
+                correspondenciaEstadoAnterior.Activo = false;
+                correspondenciaEstadoAnterior.FechaFin = DateTime.Now;
+                _context.SaveChanges();  
+            }
+
+            var correspondenciaEstadoActual = new HistoricoEstados()
+            {
+                CorrespondenciaId = correspondencia.Id,
+                EstadoId = estadonuevo.Id,
+                FechaInicio = DateTime.Now,
+                FechaFin =null,
+                FechaVencimiento =null,
+                Activo =true,
+                AccionId = accionCorrespondenciavm.AccionId,  
+                ComentarioAccion = accionCorrespondenciavm.Comentario,
+                NombreUsuarioCreador ="prueba", //sacar usuario del displayname del graph
+            };
+
+            correspondencia.EstadoActualId = correspondenciaEstadoActual.EstadoId;
+            _context.HistoricoEstados.Add(correspondenciaEstadoActual);
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception($"Error, no se guardó correctamente el nuevo estado");
+            }
+
+            return true;
+
         }
-
-
+            
     }//public
 }
