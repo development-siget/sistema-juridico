@@ -403,8 +403,8 @@ namespace Juridico.Controllers
 
             correspondenciavm.Codigo = GenerarCorrelativo();
 
-            if (ModelState.IsValid)
-            {
+           // if (ModelState.IsValid)
+           // {
 
                 //correspondenciavm.Codigo = GenerarCorrelativo();
                 correspondenciavm.FechaIngreso = DateTime.Now;
@@ -479,9 +479,10 @@ namespace Juridico.Controllers
 
 
                 // Mensaje de éxito de caso ingresado
-                TempData.AlertSuccessMessage(CommonMessages.DatosGuardadosExitosamente);
-                return RedirectToAction(nameof(Index));
-           }
+         //
+         //TempData.AlertSuccessMessage(CommonMessages.DatosGuardadosExitosamente);
+           //     return RedirectToAction(nameof(Index));
+           //} //isvalid
           
             CargarDatos(null, null);
             return View(correspondenciavm);
