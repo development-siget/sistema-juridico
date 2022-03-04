@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juridico.Migrations
 {
     [DbContext(typeof(JuridicoDbContext))]
-    [Migration("20220207201051_MigracionInicial")]
+    [Migration("20220302182011_MigracionInicial")]
     partial class MigracionInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.19")
+                .HasAnnotation("ProductVersion", "3.1.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -224,6 +224,46 @@ namespace Juridico.Migrations
                     b.ToTable("CorrespondenciaRequerimiento");
                 });
 
+            modelBuilder.Entity("Juridico.Models.DatosEmpleado", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RegionalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RegionalId");
+
+                    b.HasIndex("RolId");
+
+                    b.ToTable("DatosEmpleados");
+                });
+
             modelBuilder.Entity("Juridico.Models.Estado", b =>
                 {
                     b.Property<int>("Id")
@@ -262,6 +302,26 @@ namespace Juridico.Migrations
                     b.HasIndex("TipoEstadoId");
 
                     b.ToTable("Estados");
+                });
+
+            modelBuilder.Entity("Juridico.Models.EstadosRoles", b =>
+                {
+                    b.Property<int>("EstadoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("EstadoId", "RolId");
+
+                    b.HasIndex("RolId");
+
+                    b.ToTable("EstadosRoles");
                 });
 
             modelBuilder.Entity("Juridico.Models.HistoricoEstados", b =>
@@ -501,6 +561,27 @@ namespace Juridico.Migrations
                     b.ToTable("Requerimientos");
                 });
 
+            modelBuilder.Entity("Juridico.Models.Rol", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("Juridico.Models.Sector", b =>
                 {
                     b.Property<int>("Id")
@@ -660,11 +741,6 @@ namespace Juridico.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(5)")
-                        .HasMaxLength(5);
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(250)")
@@ -771,6 +847,19 @@ namespace Juridico.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Juridico.Models.DatosEmpleado", b =>
+                {
+                    b.HasOne("Juridico.Models.Regional", "Regional")
+                        .WithMany()
+                        .HasForeignKey("RegionalId");
+
+                    b.HasOne("Juridico.Models.Rol", "Rol")
+                        .WithMany()
+                        .HasForeignKey("RolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Juridico.Models.Estado", b =>
                 {
                     b.HasOne("Juridico.Models.Proceso", "Proceso")
@@ -782,6 +871,21 @@ namespace Juridico.Migrations
                     b.HasOne("Juridico.Models.TipoEstado", "TipoEstado")
                         .WithMany()
                         .HasForeignKey("TipoEstadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Juridico.Models.EstadosRoles", b =>
+                {
+                    b.HasOne("Juridico.Models.Estado", "Estado")
+                        .WithMany("Roles")
+                        .HasForeignKey("EstadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Juridico.Models.Rol", "Rol")
+                        .WithMany("Estados")
+                        .HasForeignKey("RolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -17,6 +17,7 @@ using Microsoft.Identity.Web.UI;
 using System.Net.Http.Headers;
 using Juridico.Data;
 using Juridico.Graph;
+using Juridico.Services;
 
 namespace Juridico
 {
@@ -36,19 +37,14 @@ namespace Juridico
 
             // Configuración de los servicios de autentificación con AAD
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-                // <AddSignInSnippet>
-                // Specify this is a web app and needs auth code flow
                 .AddMicrosoftIdentityWebApp(options =>
                 {
                     Configuration.Bind("AzureAd", options);
-
                     options.Prompt = "select_account";
-
                     options.Events.OnTokenValidated = async context =>
                     {
                         var tokenAcquisition = context.HttpContext.RequestServices
                              .GetRequiredService<ITokenAcquisition>();
-
                         var graphClient = new GraphServiceClient(
                             new DelegateAuthenticationProvider(async (request) =>
                             {
@@ -109,13 +105,6 @@ namespace Juridico
                 // See https://github.com/AzureAD/microsoft-identity-web/wiki/token-cache-serialization
                 .AddInMemoryTokenCaches();
 
-            // Servicio de solicitudes HTTP
-            services.AddHttpClient("sausigetapi", c =>
-            {
-                c.BaseAddress = new Uri(Configuration["ApiUri"]);
-                c.DefaultRequestHeaders.Add("ApiKey", Configuration["ApiKey"]);
-            });
-
             // Servicio de conexión con la base de datos
 
             services.AddDbContext<JuridicoDbContext>(options =>
@@ -129,7 +118,7 @@ namespace Juridico
 
             //services.AddHttpContextAccessor();
 
-            //services.AddTransient<IMailService, MailService>();
+            services.AddTransient<IMenuService, MenuService>();
             //services.AddTransient<ICasoService, CasoService>();
 
             //

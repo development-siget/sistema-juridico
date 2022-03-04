@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Juridico.Views.Shared.Components.Sidebar
+<!DOCTYPE html>
 <html lang="es">
 <head>
     @*<meta charset="utf-8" />
@@ -86,7 +87,8 @@
         </nav>
         <!-- /.navbar -->
         <!-- Sidebar -->
-        <partial name="_Sidebar" />
+        @*<partial name="_Sidebar" />*@
+        @(await Component.InvokeAsync<SidebarViewComponent>())
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">

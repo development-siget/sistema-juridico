@@ -88,6 +88,20 @@ namespace Juridico.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(nullable: false),
+                    isDeleted = table.Column<bool>(nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sectores",
                 columns: table => new
                 {
@@ -181,13 +195,43 @@ namespace Juridico.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Codigo = table.Column<string>(maxLength: 5, nullable: false),
                     Nombre = table.Column<string>(maxLength: 250, nullable: false),
                     isDeleted = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TiposRemitente", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DatosEmpleados",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: false),
+                    Nombre = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    RolId = table.Column<int>(nullable: false),
+                    RegionalId = table.Column<int>(nullable: true),
+                    Activo = table.Column<bool>(nullable: false),
+                    isDeleted = table.Column<bool>(nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DatosEmpleados", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DatosEmpleados_Regionales_RegionalId",
+                        column: x => x.RegionalId,
+                        principalTable: "Regionales",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DatosEmpleados_Roles_RolId",
+                        column: x => x.RolId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -293,6 +337,31 @@ namespace Juridico.Migrations
                         name: "FK_Acciones_TiposAccion_TipoAccionId",
                         column: x => x.TipoAccionId,
                         principalTable: "TiposAccion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EstadosRoles",
+                columns: table => new
+                {
+                    RolId = table.Column<int>(nullable: false),
+                    EstadoId = table.Column<int>(nullable: false),
+                    isDeleted = table.Column<bool>(nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EstadosRoles", x => new { x.EstadoId, x.RolId });
+                    table.ForeignKey(
+                        name: "FK_EstadosRoles_Estados_EstadoId",
+                        column: x => x.EstadoId,
+                        principalTable: "Estados",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EstadosRoles_Roles_RolId",
+                        column: x => x.RolId,
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -519,6 +588,16 @@ namespace Juridico.Migrations
                 column: "RemitenteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DatosEmpleados_RegionalId",
+                table: "DatosEmpleados",
+                column: "RegionalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DatosEmpleados_RolId",
+                table: "DatosEmpleados",
+                column: "RolId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Estados_ProcesoId",
                 table: "Estados",
                 column: "ProcesoId");
@@ -527,6 +606,11 @@ namespace Juridico.Migrations
                 name: "IX_Estados_TipoEstadoId",
                 table: "Estados",
                 column: "TipoEstadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EstadosRoles_RolId",
+                table: "EstadosRoles",
+                column: "RolId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HistoricoEstados_AccionId",
@@ -571,6 +655,12 @@ namespace Juridico.Migrations
                 name: "CorrespondenciaRequerimiento");
 
             migrationBuilder.DropTable(
+                name: "DatosEmpleados");
+
+            migrationBuilder.DropTable(
+                name: "EstadosRoles");
+
+            migrationBuilder.DropTable(
                 name: "Sectores");
 
             migrationBuilder.DropTable(
@@ -584,6 +674,9 @@ namespace Juridico.Migrations
 
             migrationBuilder.DropTable(
                 name: "Requerimientos");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Acciones");

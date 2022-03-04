@@ -8,7 +8,7 @@ namespace Juridico.Graph
             //"Directory.Read.All",
             //"Mail.Send",
             //"People.Read",
-            //"User.Read.All",
+            "User.Read.All",
             "User.Read"
         };
     }

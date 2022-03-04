@@ -1,0 +1,124 @@
+﻿@model IEnumerable<MenuItem>
+
+@using Juridico.Graph
+@using System.Security.Claims
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+        <img src="~/img/logo_goes.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">JURIDICO - SIGET</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <!-- Sidebar user (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="@User.GetUserGraphPhoto()" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">@User.GetUserGraphDisplayName()</a>
+                    <a href="#" class="d-block">
+                        <small>@User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Role))?.Value</small>
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Sidebar user (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="~/img/man.png" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">Sesión no iniciada</a>
+                </div>
+            </div>
+        }
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut" class="nav-link">
+                            <i class="nav-icon fas fa-sign-out-alt"></i>
+                            <p>
+                                Cerrar sesión
+                            </p>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn" class="nav-link">
+                            <i class="nav-icon fas fa-sign-in-alt"></i>
+                            <p>
+                                Iniciar sesión
+                                <span class="right badge badge-danger">New</span>
+                            </p>
+                        </a>
+                    </li>
+                }
+
+                @foreach (var item in Model)
+                {
+                    @if (item.SubMenu)
+                    {
+                        <li class="@(item.Activo ? "nav-item menu-open" : "nav-item")">
+                            <a href="#" class="@(item.Activo ? "nav-link active" : "nav-link")">
+                                <i class="nav-icon fa @item.Icono"></i>
+                                <p>
+                                    @item.Nombre
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            @foreach(var subMenuitem in item.SubMenuItems)
+                            {
+                                <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="@subMenuitem.Controlador" asp-action="@subMenuitem.Accion" class="@(subMenuitem.Activo ? "nav-link active" : "nav-link")">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@subMenuitem.Nombre</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a asp-controller="@item.Controlador" asp-action="@item.Accion" class="@(item.Activo ? "nav-link active" : "nav-link")">
+                                <i class="nav-icon fa @item.Icono"></i>
+                                <p>@item.Nombre</p>
+                            </a>
+                        </li>
+                    }
+                }
+
+                <!-- Otros -->
+                <li class="nav-header">Otros</li>
+                <!-- Soporte informática -->
+                <li class="nav-item">
+                    <a href="https://helpdesk.siget.gob.sv/" class="nav-link">
+                        <i class="nav-icon fa fa-life-ring"></i>
+                        <p>Soporte informática</p>
+                    </a>
+                </li>
+
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
