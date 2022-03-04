@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Juridico.Models.EmpleadosRequerimiento>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Lista</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive">
+                <table id="mainTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DatosEmpleado.Nombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Requerimiento)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DatosEmpleado.Nombre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Requerimiento.NombreAccion)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new {  id=item.DatosEmpleadosId }) |
+                                    @Html.ActionLink("Details", "Details", new {  id=item.DatosEmpleadosId }) |
+                                   
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_IndexJSPartial" />
+}

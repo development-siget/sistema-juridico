@@ -273,7 +273,8 @@
         $(function () {
             //Initialize Select2 Elements
             $('.select2').select2();
-            $('.select2-ajax').select2({
+            $('.select2-ajax').select2(
+           {
                 ajax: {
                     url: '/api/Remitentes/Search',
                     headers: {
@@ -318,11 +319,7 @@
                 getPersona();
             }
 
-            //   $("#ingresarpersona").on('change', function () {
-            // $('.modal-body').load(`/masterdetails/product?id=${$(this).data('id')}`);
-
-
-            //   });
+            
 
 
         })

@@ -162,7 +162,7 @@ namespace Juridico.Controllers
                 },
                 IngresadoPorId = c.IngresadoPorId,
                 EstadoActualId = c.EstadoActualId,
-                /*
+                
                 HistoricoEstados =c.HistoricoEstados.Select(he=> new HistoricoEstados()
                 { 
                    Id = he.Id,
@@ -184,7 +184,7 @@ namespace Juridico.Controllers
                    ComentarioAccion= he.ComentarioAccion,
                    NombreUsuarioCreador =he.NombreUsuarioCreador,
                 }).ToList(), 
-                */
+                
             }).FirstOrDefault(m => m.Id == id);
 
             if (correspondencia == null)
