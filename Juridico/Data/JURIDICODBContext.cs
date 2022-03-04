@@ -31,6 +31,7 @@ namespace Juridico.Data
         public DbSet<DatosEmpleado> DatosEmpleados { get; set; }
         public DbSet<EstadosRoles> EstadosRoles { get; set; }
         public DbSet<Rol> Roles { get; set; }
+        public DbSet<EmpleadosRequerimiento> EmpleadosRequerimiento { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -155,6 +156,22 @@ namespace Juridico.Data
                 .HasForeignKey(er => er.RolId);
             modelBuilder.Entity<EstadosRoles>().Property<bool>("isDeleted").HasDefaultValue(false);
             modelBuilder.Entity<EstadosRoles>().HasQueryFilter(x => EF.Property<bool>(x, "isDeleted") == false);
+
+            // Tabla: EmpleadosRequerimiento
+
+
+            modelBuilder.Entity<EmpleadosRequerimiento>()
+              .HasKey(er => new { er.DatosEmpleadosId, er.RequerimientoId });
+            modelBuilder.Entity<EmpleadosRequerimiento>()
+                .HasOne(er => er.DatosEmpleado)
+                .WithMany(e => e.Requerimientos)
+                .HasForeignKey(er => er.DatosEmpleadosId);
+            modelBuilder.Entity<EmpleadosRequerimiento>()
+                .HasOne(er => er.Requerimiento)
+                .WithMany(r => r.DatosEmpleados)
+                .HasForeignKey(er => er.RequerimientoId);
+            modelBuilder.Entity<EmpleadosRequerimiento>().Property<bool>("isDeleted").HasDefaultValue(false);
+            modelBuilder.Entity<EmpleadosRequerimiento>().HasQueryFilter(x => EF.Property<bool>(x, "isDeleted") == false);
 
         }
 

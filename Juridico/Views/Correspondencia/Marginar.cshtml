@@ -103,11 +103,11 @@
                                     @Html.DisplayFor(model => model.EstadoActual.Nombre)
                                 </dd>
                                 @*<dt class="col-sm-2">
-                                        @Html.DisplayNameFor(model => model.IngresadoPorId)
-                                    </dt>
-                                    <dd class="col-sm-10">
-                                        @Html.DisplayFor(model => model.IngresadoPorId)
-                                    </dd>*@
+                        @Html.DisplayNameFor(model => model.IngresadoPorId)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.IngresadoPorId)
+                    </dd>*@
                                 <dt class="col-sm-2">
                                     @Html.DisplayNameFor(model => model.Remitente)
                                 </dt>
@@ -139,14 +139,66 @@
                                 </dd>
                             </dl>
                             @*<dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.Proceso)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.Proceso.Codigo)
-                                </dd>*@
+                    @Html.DisplayNameFor(model => model.Proceso)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Proceso.Codigo)
+                </dd>*@
 
 
                         </div>  <!-- /. row -->
+                    </div>
+
+                    <!-- Tab Historico Estados -->
+                    <div class="tab-pane fade" id="custom-tabs-two-estados" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Acción realizada</th>
+                                    <th>Acción realizada por</th>
+                                    <th>Estado resultado</th>
+                                    <th>Fecha inicio</th>
+                                    <th>Fecha vencimiento</th>
+                                    <th>Fecha finalización</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var historicoEstado in Model.HistoricoEstados)
+                                {
+                                    <tr data-widget="expandable-table" aria-expanded="true">
+                                        <td>@historicoEstado.Accion.Nombre</td>
+                                        <td>@historicoEstado.NombreUsuarioCreador</td>
+                                        <td>@historicoEstado.Estado.Nombre</td>
+                                        <td>@historicoEstado.FechaInicio.ToString("dd/MM/yyyy hh:mm tt")</td>
+                                        @if (historicoEstado.FechaVencimiento.HasValue)
+                                        {
+                                            <td>@historicoEstado.FechaVencimiento.Value.ToString("dd/MM/yyyy")</td>
+                                        }
+                                        else
+                                        {
+                                            <td>----------</td>
+                                        }
+                                        @if (historicoEstado.FechaFin.HasValue)
+                                        {
+                                            <td>@historicoEstado.FechaFin.Value.ToString("dd/MM/yyyy hh:mm tt")</td>
+                                        }
+                                        else
+                                        {
+                                            <td>----------</td>
+                                        }
+                                    </tr>
+                                    <tr class="expandable-body">
+                                        <td colspan="6">
+                                            <p>
+                                                @historicoEstado.ComentarioAccion
+                                            </p>
+                                            
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
                     </div>
                 </div> <!-- /.tab content -->
             </div> <!-- /.card -->

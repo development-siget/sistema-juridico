@@ -18,5 +18,7 @@ namespace Juridico.Models
 
         public ICollection<CorrespondenciaRequerimiento> CorrespondenciaRequerimientos { get; set; }
 
+        public List<EmpleadosRequerimiento> DatosEmpleados { get; set; }
+
     }
 }

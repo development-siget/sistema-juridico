@@ -26,5 +26,7 @@ namespace Juridico.Models
 
         public bool Activo { get; set; }
 
+        public List<EmpleadosRequerimiento> Requerimientos { get; set; }
+
     }
 }
