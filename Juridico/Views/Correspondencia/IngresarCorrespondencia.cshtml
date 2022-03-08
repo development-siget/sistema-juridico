@@ -133,7 +133,7 @@
                             <div class="form-group">
                                 @*<label asp-for="AnexoId" class="control-label d-block"></label>*@
                                 <label class="control-label">Seleccione Anexos de la correspondencia</label>
-                                <select id="anexos" style="width:100%;" asp-for="Id_Anexos" class="form-control select2" multiple="multiple" asp-items="ViewBag.Id_Anexos">
+                                <select id="anexos" style="width:100%;" asp-for="Id_Anexos" name="anexos[]" class="form-control select2" multiple="multiple" asp-items="ViewBag.Id_Anexos">
                                 </select>
                             </div>
                         </div>

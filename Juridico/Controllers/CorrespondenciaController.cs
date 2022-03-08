@@ -82,21 +82,6 @@ namespace Juridico.Controllers
                 return NotFound();
             }
 
-            /*
-            var usuarios = _graphServiceClient.GetUserList().Select(u => new
-            {
-                id = u.Id,
-                //Nombre = $"{u.DisplayName} - {u.Mail}"
-                DisplayName = u.DisplayName,
-                Mail =u.Mail,
-            });*/
-
-            // var listdestinatarios = GetAllUser(null, null);
-
-           // var usuarios = _graphServiceClient.GetUserList().ToList();
-           //  ViewData["Usuarios"] = new SelectList(usuarios, "Id", "Nombre");
-
-
             return View(correspondenciavm);
             
         }
@@ -117,7 +102,7 @@ namespace Juridico.Controllers
                     DisplayName = item.DisplayName
                 });
             }
-            return listdestinatarios;
+            return listdestinatarios.ToList();
 
         }
         */
@@ -183,6 +168,7 @@ namespace Juridico.Controllers
                    },
                    ComentarioAccion= he.ComentarioAccion,
                    NombreUsuarioCreador =he.NombreUsuarioCreador,
+                   
                 }).ToList(), 
                 
             }).FirstOrDefault(m => m.Id == id);
@@ -192,13 +178,23 @@ namespace Juridico.Controllers
                 return null;
             }
             var requerimientos = _context.Requerimientos.ToList();
-            
+
+          
+
+            var usuarios = _graphServiceClient.GetUserList().Select(u => new
+            {
+                u.Id,
+                Nombre = $"{u.DisplayName} - {u.Mail}"
+            });
+
+
             var correspondenciavm = _mapper.Map<CorrespondenciaViewModel>(correspondencia);
             var estadoactual = _context.Estados.AsNoTracking().First(e => e.Id == correspondenciavm.EstadoActualId);
             correspondenciavm.EstadoActual = estadoactual;
             correspondenciavm.Requerimientos = requerimientos;
 
-            
+            ViewData["Usuarios"] = new SelectList(usuarios, "Id", "Nombre");
+
 
             return correspondenciavm;
         }
@@ -252,12 +248,7 @@ namespace Juridico.Controllers
                 
             };
 
-            // var remi = await _context.Remitentes.FindAsync(RemitenteId);
-            //var remi = _context.Remitentes.Find(RemitenteId);  
-            //if (remi == null)
-            //{
-            //    return NotFound();
-            //}
+          
 
             if (RemitenteId != null)
             {
@@ -272,11 +263,8 @@ namespace Juridico.Controllers
             }
             correspondenciavm.Codigo = GenerarCorrelativoInicial();
 
-           // GetUltimaPersona();
-
+           
             CargarDatos(PersonaPresentoId,RemitenteId);
-            //ViewData["Remitentes"] = new SelectList(remitentesvm, "Id", "NombreRemitente");
-            //ViewData["Personas"] = new SelectList(personas, "Id", "Nombres");
             return View(correspondenciavm);
         }
 
@@ -414,8 +402,8 @@ namespace Juridico.Controllers
                 // Si el usuario está logueado guardar el id de empleado
                 if (_user.Identity.IsAuthenticated)
                 {
-                   // var empleadoId = _context.DatosEmpleados.FirstOrDefault(de => de.UserId.Equals(_user.GetUserGraphId()))?.Id;
-                   // correspondenciavm.IngresadoPorId = empleadoId;
+                    var empleadoId = _context.DatosEmpleados.FirstOrDefault(de => de.UserId.Equals(_user.GetUserGraphId()))?.Id;
+                    correspondenciavm.IngresadoPorId = (int)empleadoId;
                 }
                 else
                 {
@@ -438,7 +426,7 @@ namespace Juridico.Controllers
                 RegionalId = 1,
                 ProcesoId = proceso.Id,
                 EstadoActualId =1,
-                IngresadoPorId = 1,
+                IngresadoPorId = correspondenciavm.IngresadoPorId,
 
             };
                    //_mapper.Map<Correspondencia>(correspondenciavm);

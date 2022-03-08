@@ -41,6 +41,7 @@ namespace Juridico.Services
                     new SubMenuItem(){Id = 11, Nombre = "Tipo Entidad", Controlador = "TipoEntidad", Accion = "Index"},
                     new SubMenuItem(){Id = 12, Nombre = "Tipo Estado", Controlador = "TipoEstado", Accion = "Index"},
                     new SubMenuItem(){Id = 13, Nombre = "Tipo Remitente", Controlador = "TipoRemitente", Accion = "Index"},
+                    new SubMenuItem(){Id = 14, Nombre = "Empleados Requerimiento", Controlador = "EmpleadosRequerimiento", Accion = "Create"},
                 }}
             };
             return itemsMenu;

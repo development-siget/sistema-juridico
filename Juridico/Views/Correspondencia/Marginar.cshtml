@@ -70,6 +70,24 @@
                                     @Html.DisplayFor(model => model.Referencia)
                                 </dd>
                             </dl>
+                            <dl class="col-md-6">
+                                <dt class="col-sm-6">
+                                    @Html.DisplayNameFor(model => model.FechaIngreso)
+                                </dt>
+                                <dd class="col-sm-6">
+                                    @Html.DisplayFor(model => model.FechaIngreso)
+                                </dd>
+                            </dl>
+                            <dl class="col-md-6">
+                                <dt class="col-sm-6">
+                                    @Html.DisplayNameFor(model => model.FechaDocumento)
+                                </dt>
+                                <dd class="col-sm-6">
+                                    @Html.DisplayFor(model => model.FechaDocumento)
+                                </dd>
+                            </dl>
+
+
 
                             <dl class="col-md-12">
                                 <dt class="col-sm-2">
@@ -78,36 +96,16 @@
                                 <dd class="col-sm-10">
                                     @Html.DisplayFor(model => model.Objeto)
                                 </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.FechaIngreso)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.FechaIngreso)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.FechaDocumento)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.FechaDocumento)
-                                </dd>
-                                <dt class="col-sm-2">
-                                    @Html.DisplayNameFor(model => model.FechaFinalizacion)
-                                </dt>
-                                <dd class="col-sm-10">
-                                    @Html.DisplayFor(model => model.FechaFinalizacion)
-                                </dd>
+                            </dl>
+                            <dl class="col-md-12">
                                 <dt class="col-sm-2">
                                     @Html.DisplayNameFor(model => model.EstadoActual)
                                 </dt>
                                 <dd class="col-sm-10">
                                     @Html.DisplayFor(model => model.EstadoActual.Nombre)
                                 </dd>
-                                @*<dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.IngresadoPorId)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.IngresadoPorId)
-                    </dd>*@
+                            </dl>
+                            <dl class="col-md-12">
                                 <dt class="col-sm-2">
                                     @Html.DisplayNameFor(model => model.Remitente)
                                 </dt>
@@ -115,21 +113,30 @@
                                     @Html.DisplayFor(model => model.Remitente.NombreRemitente)
                                 </dd>
                             </dl>
+                            <dl class="col-md-12">
+                                <dt class="col-md-6">
+                                    Presentado Por
+                                </dt>
+                                <dd class="col-sm-6">
+
+                                </dd>
+                            </dl>
                             <dl class="col-md-6">
                                 <dt class="col-md-6">
-                                    @Html.DisplayNameFor(model => model.PersonaPresento)
                                 </dt>
                                 <dd class="col-sm-10">
                                     @Html.DisplayFor(model => model.PersonaPresento.Nombres)
                                 </dd>
                             </dl>
                             <dl class="col-md-6">
-                                <dt>
+                                <dt class="col-md-6">
                                 </dt>
-                                <dd>
+                                <dd class="col-sm-10">
                                     @Html.DisplayFor(model => model.PersonaPresento.Apellidos)
                                 </dd>
                             </dl>
+
+
                             <dl class="col-md-12">
                                 <dt class="col-sm-2">
                                     @Html.DisplayNameFor(model => model.Regional)
@@ -138,13 +145,13 @@
                                     @Html.DisplayFor(model => model.Regional.Nombre)
                                 </dd>
                             </dl>
-                            @*<dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Proceso)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Proceso.Codigo)
-                </dd>*@
 
+                            @*<dt class="col-sm-2">
+                                  @Html.DisplayNameFor(model => model.IngresadoPorId)
+                              </dt>
+                              <dd class="col-sm-10">
+                                  @Html.DisplayFor(model => model.IngresadoPorId)
+                              </dd>*@
 
                         </div>  <!-- /. row -->
                     </div>
@@ -192,7 +199,7 @@
                                             <p>
                                                 @historicoEstado.ComentarioAccion
                                             </p>
-                                            
+
                                         </td>
                                     </tr>
                                 }
@@ -223,8 +230,8 @@
                 <div class="form-group">
                     @*<label asp-for="AnexoId" class="control-label d-block"></label>*@
                     @*<label class="control-label">Seleccione los destinatarios</label>*@
-                    <label asp-for="DisplayNameDestinatario" class="control-label">Seleccione los destinatarios</label>
-                    <select id="destinatarios" style="width:100%;" asp-for="DestinatariosSL" class="form-control select2" multiple="multiple" asp-items="ViewBag.Usuarios">
+                    <label asp-for="DestinatarioId" class="control-label">Seleccione los destinatarios</label>
+                    <select id="destinatarios" style="width:100%;" asp-for="DestinatarioId" class="form-control select2" multiple="multiple" asp-items="ViewBag.Usuarios">
                         <option>Selecione una opción</option>
                     </select>
                     <span asp-validation-for="DestinatarioId" class="text-danger"></span>
@@ -262,7 +269,26 @@
                     </div>
                 </div>
 
-                </div> <!-- Card body -->
-            </div>
+            </div> <!-- Card body -->
+        </div>
     </div>
 </div> <!-- Card row marginar -->
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <!-- JasnyBootstrap -->
+    <script src="~/lib/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(function (){
+            //Initialize Select2 Elements
+            $('.select2').select2();
+            $('.select2-ajax').select2();
+
+        })
+    </script>
+}
