@@ -37,7 +37,7 @@ namespace Juridico.Services
                     new SubMenuItem(){Id = 7, Nombre = "Requerimientos", Controlador = "Requerimiento", Accion = "Index"},
                     new SubMenuItem(){Id = 8, Nombre = "Tipo Acción", Controlador = "TipoAccion", Accion = "Index"},
                     new SubMenuItem(){Id = 9, Nombre = "Tipo Archivo", Controlador = "TipoArchivo", Accion = "Index"},
-                    new SubMenuItem(){Id = 10, Nombre = "Tipo Documento", Controlador = "TipoDocumento", Accion = "Index"},
+                    new SubMenuItem(){Id = 10, Nombre = "Tipo Documento", Controlador = "TipoDocumentoRemitente", Accion = "Index"},
                     new SubMenuItem(){Id = 11, Nombre = "Tipo Entidad", Controlador = "TipoEntidad", Accion = "Index"},
                     new SubMenuItem(){Id = 12, Nombre = "Tipo Estado", Controlador = "TipoEstado", Accion = "Index"},
                     new SubMenuItem(){Id = 13, Nombre = "Tipo Remitente", Controlador = "TipoRemitente", Accion = "Index"},

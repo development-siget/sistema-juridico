@@ -52,10 +52,6 @@ namespace Juridico.Controllers
             {
                 return NotFound();
             }
-
-
-
-
             var correspondencia = await _context.Correspondencias
                 .Include(c => c.EstadoActual)
                 .Include(c => c.PersonaPresento)
@@ -387,7 +383,7 @@ namespace Juridico.Controllers
         {
            
 
-            var proceso = _context.Procesos.AsNoTracking().First(p => p.Codigo == "M"); //flujo de marginacion
+            var proceso = _context.Procesos.AsNoTracking().First(p => p.Codigo == "C"); //flujo de marginacion
 
             correspondenciavm.Codigo = GenerarCorrelativo();
 
