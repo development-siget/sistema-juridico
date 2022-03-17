@@ -14,7 +14,7 @@ namespace Juridico.Services
                 new MenuItem() { Id = 2, Nombre = "Correspondencia", Icono = "fa-envelope-open", SubMenu = true, SubMenuItems = new List<SubMenuItem>()
                 {
                     new SubMenuItem(){Id = 1, Nombre = "Lista", Controlador = "Correspondencia", Accion = "Index"},
-                    new SubMenuItem(){Id = 1, Nombre = "Ingresar correspondencia", Controlador = "Correspondencia", Accion = "IngresarCorrespondencia"},
+                    new SubMenuItem(){Id = 1, Nombre = "Ingresar correspondencia", Controlador = "Correspondencia", Accion = "Create"},
                 }},
                 new MenuItem() { Id = 2, Nombre = "Personas", Icono = "fa-users", SubMenu = true, SubMenuItems = new List<SubMenuItem>()
                 {

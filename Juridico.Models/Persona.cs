@@ -36,6 +36,6 @@ namespace Juridico.Models
 
         public ICollection<Correspondencia> Correspondencias { get; set; }
 
-
+        public string NombreCompletoDui => $"{Dui} - {Nombres} {Apellidos}";
     }
 }

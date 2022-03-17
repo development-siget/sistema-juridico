@@ -119,7 +119,8 @@ namespace Juridico
             //services.AddHttpContextAccessor();
 
             services.AddTransient<IMenuService, MenuService>();
-            //services.AddTransient<ICasoService, CasoService>();
+            services.AddTransient<IWorkFlowService, WorkFlowService>();
+            services.AddTransient<ICorrespondenciaService, CorrespondienciaService>();
 
             //
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Juridico.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,13 +27,13 @@ namespace Juridico.ViewModels
         [MaxLength(500)]
         public string Objeto { get; set; } //descripcion del documento
 
-        //[Column(TypeName = "date")]
+        [DataType(DataType.Date)]
         public DateTime FechaIngreso { get; set; }
 
-        // [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
         public DateTime FechaDocumento { get; set; }
 
-        // [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
         public DateTime? FechaFinalizacion { get; set; }
 
         [Display(Name = "Estado Actual")]
@@ -40,6 +41,7 @@ namespace Juridico.ViewModels
         public Estado EstadoActual { get; set; }
 
         public int IngresadoPorId { get; set; } // Id de DatosEmpleado
+        public string IngresadoPorNombre { get; set; } 
 
         public int RemitenteId { get; set; } //nombre de la empresa o persona que envia la documentacion
         public Remitente Remitente { get; set; }

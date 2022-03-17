@@ -7,12 +7,10 @@
     ViewData["CardTitle"] = "Ingreso Correspondencia";
 }
 
-
-
 <div class="row">
     <div class="col-lg-8 offset-lg-2">
-        <partial name="_Alertas" />
-        <input type="hidden" id="carga" value="@ViewBag.Carga" />
+        <partial name="_Alertas"/>
+        <input type="hidden" id="carga" value="@ViewBag.Carga"/>
         <!-- general form elements -->
         <div class="card card-secondary">
             <div class="card-header">
@@ -27,14 +25,14 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label asp-for="Codigo" class="control-label"></label>
-                                <input readonly asp-for="Codigo" class="form-control" />
-                                @*<span asp-validation-for="Codigo" class="text-danger"></span>*@
+                                <input readonly asp-for="Codigo" class="form-control"/>
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label asp-for="Referencia" class="control-label"></label>
-                                <input asp-for="Referencia" class="form-control" />
+                                <input asp-for="Referencia" class="form-control"/>
                                 <span asp-validation-for="Referencia" class="text-danger"></span>
                             </div>
                         </div>
@@ -43,7 +41,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label asp-for="FechaIngreso" class="control-label"></label>
-                                <input asp-for="FechaIngreso" class="form-control" />
+                                <input asp-for="FechaIngreso" class="form-control"/>
                                 <span asp-validation-for="FechaIngreso" class="text-danger"></span>
                             </div>
                         </div>
@@ -51,7 +49,7 @@
                             <div class="form-group">
 
                                 <label asp-for="FechaDocumento" class="control-label"></label>
-                                <input asp-for="FechaDocumento" class="form-control" />
+                                <input asp-for="FechaDocumento" class="form-control"/>
                                 <span asp-validation-for="FechaDocumento" class="text-danger"></span>
                             </div>
                         </div>
@@ -60,56 +58,56 @@
                         <div class="form-group col-lg-8">
 
                             <label asp-for="RemitenteId" class="control-label">Remitente</label>
-                            <select asp-for="RemitenteId" class="form-control select2-ajax" style="width: 100%;" asp-items="ViewBag.Remitentes">
+                            <select asp-for="RemitenteId" class="form-control select2-remitentes" style="width: 100%;">
                                 <option value="0" selected="selected">Seleccione una opción</option>
                             </select>
                             <span asp-validation-for="RemitenteId" class="text-danger"></span>
 
                         </div>
                         <div class="col-lg-4 mt-3">
-                            <a onclick="showInPopupLg('@Url.Action("AddRemitente","Remitentes",null,Context.Request.Scheme)','Nuevo Remitente')" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nuevo Remitente</a>
+                            <a onclick="showInPopupLg('@Url.Action("AddRemitente", "Remitentes", null, Context.Request.Scheme)', 'Nuevo Remitente')" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nuevo Remitente</a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Remitente</label>
-                                <input disabled id="dc_nombreremitente" class="form-control" />
+                                <input disabled id="remitente_nombre" class="form-control"/>
                             </div>
                         </div>
                     </div>
-                 
+
                     <div class="row align-items-center">
                         <div class="form-group col-lg-8">
                             <label asp-for="PersonaPresentoId" class="control-label">Presentado Por</label>
-                            <select asp-for="PersonaPresentoId" class="form-control select3-ajax" style="width: 100%;" asp-items="ViewBag.Personas">
+                            <select asp-for="PersonaPresentoId" class="form-control select3-personas" style="width: 100%;" asp-items="ViewBag.Personas">
                                 <option value="0" selected="selected">Seleccione una opción</option>
                             </select>
                             <span asp-validation-for="PersonaPresentoId" class="text-danger"></span>
 
                         </div>
                         <div class="col-lg-4 mt-3">
-                            <a onclick="showInPopupLg('@Url.Action("AddPersona","Persona",null,Context.Request.Scheme)','Nueva Persona')" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nueva Persona</a>
+                            <a onclick="showInPopupLg('@Url.Action("AddPersona", "Persona", null, Context.Request.Scheme)', 'Nueva Persona')" class="btn btn-primary btn-block"><i class="fa fa-plus-circle"></i> Nueva Persona</a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>Nombres</label>
-                            <input disabled id="dc_nombres" class="form-control" />
+                            <input disabled id="persona_nombres" class="form-control"/>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Apellidos</label>
-                            <input disabled id="dc_apellidos" class="form-control" />
+                            <input disabled id="persona_apellidos" class="form-control"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>DUI</label>
-                            <input disabled id="dc_dui" class="form-control" />
+                            <input disabled id="persona_dui" class="form-control"/>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Otro Documento</label>
-                            <input disabled id="dc_otrodocumento" class="form-control" />
+                            <input disabled id="persona_otrodocumento" class="form-control"/>
                         </div>
                     </div>
 
@@ -121,7 +119,7 @@
                         </div>
                     </div>
 
-                   
+
                     <div class="row">
                         <div class="col-lg-12">
 
@@ -133,107 +131,52 @@
                             <div class="form-group">
                                 @*<label asp-for="AnexoId" class="control-label d-block"></label>*@
                                 <label class="control-label">Seleccione Anexos de la correspondencia</label>
-                                <select id="anexos" style="width:100%;" asp-for="Id_Anexos" name="anexos[]" class="form-control select2" multiple="multiple" asp-items="ViewBag.Id_Anexos">
+                                <select id="anexos" style="width: 100%;" asp-for="Id_Anexos" name="anexos[]" class="form-control select2" multiple="multiple" asp-items="ViewBag.Id_Anexos">
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div> <!-- card body -->
-                        <div class="card-footer">
-                            <div class="row">
-                                <div class="col-4">
-                                    <button type="submit" class="btn btn-success btn-block"><i class="fa fa-save"></i> Guardar</button>
-                                </div>
-                                <div class="col-4">
-
-                                </div>
-                                <div class="col-4">
-                                    <a class="btn btn-default btn-block btn-flat" asp-action="Index"><i class="fa fa-arrow-left"></i> Regresar</a>
-                                </div>
-                            </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-success btn-block"><i class="fa fa-save"></i> Guardar</button>
                         </div>
+                        <div class="col-4">
 
-</form>
+                        </div>
+                        <div class="col-4">
+                            <a class="btn btn-default btn-block btn-flat" asp-action="Index"><i class="fa fa-arrow-left"></i> Regresar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
     </div>
 </div>
-
-
-
-<div class="modal fade" data-backdrop="false" tabindex="-1" padding-right: 17px;" role="dialog" id="modal-alerta">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content bg-gradient-red">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="icon fas fa-check"></i> ¡Error!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-
-            </div>
-            <div class="modal-body text-center">
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
 
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
     <!-- Select2 -->
     <script src="~/lib/select2/js/select2.full.min.js"></script>
     <!-- JasnyBootstrap -->
     <script src="~/lib/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
 
 
-
     <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            $('#modal-mensaje').modal('show');
-        });
-
-        $("div").on('click', function () {
-
-            $('#modal-mensaje').modal('hide');
-        });
-        $("div").on('click', function () {
-
-            $('#modal-mensaje2').modal('hide');
-        });
-
-        $("div").on('click', function () {
-
-            $('#modal-alerta').modal('hide');
-        });
-
-
-
 
         function getRemitente() {
             var RemitenteId = $("#RemitenteId").val();
-
-            //console.log(RemitenteId);
-
             $.ajax({
-                url: `/api/Remitentes/Formulario/${RemitenteId}`,
+                url: `/api/Remitentes/${RemitenteId}`,
                 contentType: 'application/json',
-
                 type: 'GET',
-                success: function (data) {
-                    console.log(data[0].RemitenteId);
-                    $("#RemitenteId").val(data[0].RemitenteId);
-                    // $("#dc_nombreremitente").val(data[0].RemitenteId);
-                    //  $("#nombreremitente").val(data.nombreremitente); //asigno valor id a textbox
-                    //  $("#dc_nombreremitente").val(data.NombreRemitente);
-
+                success: function(data) {
+                    $("#remitente_nombre").val(data.nombreRemitente);
                 },
-                error: function () {
+                error: function() {
                     alert('Error de conexión con el servidor.');
                 }
 
@@ -241,75 +184,79 @@
         }
 
         function getPersona() {
-
-           
             let PersonaId = $("#PersonaPresentoId").val();
-            
-            console.log(PersonaId);
             $.ajax({
-                url: `/api/PresentadoPor/Formulario/${PersonaId}`,
+                url: `/api/Personas/${PersonaId}`,
                 contentType: 'application/json',
                 type: 'GET',
-                success: function (data) {
-                    // console.log(data[0].PersonaId);
-                    // $("#PersonaId").val(data[0].PersonaId);
-                    //  $("#nombreremitente").val(data.nombreremitente); //asigno valor id a textbox
-                    $("#dc_nombres").val(data.Nombres);
+                success: function(data) {
+                    $("#persona_nombres").val(data.nombres);
+                    $("#persona_apellidos").val(data.apellidos);
+                    $("#persona_dui").val(data.dui);
+                    $("#persona_otroDocumento").val(data.otroDocumento);
                 },
-                error: function () {
+                error: function() {
                     alert('Error de conexión con el servidor.');
                 }
             });
 
         }
 
-        /*
-        $(document).ready(function () {
-            $('#example-getting-started').multiselect();
-        });
-        */
-
         // Función principal, espera a que el documento esté cargado para ejecutarse.
-        $(function () {
+        $(function() {
             //Initialize Select2 Elements
             $('.select2').select2();
-            $('.select2-ajax').select2(
-           {
-                ajax: {
-                    url: '/api/Remitentes/Search',
-                    headers: {
-                        'apiKey': 'pYJY2uZ2j0So6OnezzPf9Q'
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
+            $('.select2-remitentes').select2(
+                {
+                    ajax: {
+                        url: function(params) {
+                            return `/api/Remitentes/Search/${params.term}`;
+                        },
+                        headers: {
+                            'apiKey': 'pYJY2uZ2j0So6OnezzPf9Q'
+                        },
+                        processResults: function(data) {
+                            var dataMap = $.map(data,
+                                function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nombreRemitente
+                                    };
+                                });
+                            return {
+                                results: dataMap
+                            };
+                        }
                     }
-                }
-            });
-
-
-            $('.select3-ajax').select2({
+                });
+            $('.select3-personas').select2({
                 ajax: {
-                    url: '/api/PresentadoPor/Search',
-                    headers: {
-                        'apiKey': 'pYJY2uZ2j0So6OnezzPf9Q'
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
+                        url: function(params) {
+                            return `/api/Personas/Search/${params.term}`;
+                        },
+                        headers: {
+                            'apiKey': 'pYJY2uZ2j0So6OnezzPf9Q'
+                        },
+                        processResults: function(data) {
+                            var dataMap = $.map(data,
+                                function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nombreCompletoDui
+                                    };
+                                });
+                            return {
+                                results: dataMap
+                            };
+                        }
                     }
-                }
-
-            });
-
+                });
+            //
             $("#RemitenteId").on('change', getRemitente);
-
             if (parseInt($("#RemitenteId").val()) > 0) {
                 getRemitente();
             }
-
+            //
             $("#PersonaPresentoId").on('change', getPersona);
 
             if (parseInt($("#PersonaPresentoId").val()) > 0) {
@@ -319,10 +266,7 @@
                 getPersona();
             }
 
-            
-
-
-        })
+        });
 
 
     </script>

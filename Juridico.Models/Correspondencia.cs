@@ -37,7 +37,7 @@ namespace Juridico.Models
         public int? EstadoActualId { get; set; }
         public Estado EstadoActual { get; set; }
 
-        public int IngresadoPorId { get; set; } // Id de DatosEmpleado
+        public string IngresadoPorNombre { get; set; } // Id de DatosEmpleado
 
         public int RemitenteId { get; set; } //nombre de la empresa o persona que envia la documentacion
         public Remitente Remitente { get; set; }

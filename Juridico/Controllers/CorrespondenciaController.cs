@@ -8,9 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Juridico.Data;
 using Juridico.Models;
 using Juridico.Helpers;
-//using static Juridico.Helpers.ModalHelper;
 using Juridico.ViewModels;
-//using System.Web.Mvc;
 using AutoMapper;
 using Microsoft.Graph;
 using Juridico.Graph;
@@ -18,20 +16,31 @@ using Juridico.Tools;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Juridico.Extensions;
-using Juridico.Utilities; 
+using Juridico.Services;
+using Juridico.Utilities;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Identity.Web;
 
 namespace Juridico.Controllers
 {
     public class CorrespondenciaController : Controller
     {
         private readonly JuridicoDbContext _context;
+        private readonly ICorrespondenciaService _correspondenciaService;
+        private readonly IWorkFlowService _workFlowService;
         private readonly IMapper _mapper;
         private readonly GraphServiceClient _graphServiceClient;
         private readonly ClaimsPrincipal _user;
 
-        public CorrespondenciaController(JuridicoDbContext context, IMapper mapper, GraphServiceClient graphServiceClient, IHttpContextAccessor httpContextAccessor)
+        public CorrespondenciaController(JuridicoDbContext context,
+            ICorrespondenciaService correspondenciaService,
+            IWorkFlowService workFlowService,
+            IMapper mapper, GraphServiceClient graphServiceClient,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _correspondenciaService = correspondenciaService;
+            _workFlowService = workFlowService;
             _mapper = mapper;
             _graphServiceClient = graphServiceClient;
             _user = httpContextAccessor.HttpContext.User;
@@ -66,8 +75,10 @@ namespace Juridico.Controllers
 
             return View(correspondencia);
         }
+        
         //Carga detalles de Marginar
         // GET: Correspondencia/Marginar/5
+        [AuthorizeForScopes]
         public IActionResult Marginar(int? id)
         {
 
@@ -83,7 +94,7 @@ namespace Juridico.Controllers
         }
 
 
-        /*
+
         public List<Destinatario> GetAllUser(string id, string displayname)
         {
             var listdestinatarios = new List<Destinatario>();
@@ -101,7 +112,7 @@ namespace Juridico.Controllers
             return listdestinatarios.ToList();
 
         }
-        */
+
 
 
 
@@ -141,7 +152,7 @@ namespace Juridico.Controllers
                     Id = c.Proceso.Id,
                     Nombre = c.Proceso.Nombre,  
                 },
-                IngresadoPorId = c.IngresadoPorId,
+                //IngresadoPorId = c.IngresadoPorId,
                 EstadoActualId = c.EstadoActualId,
                 
                 HistoricoEstados =c.HistoricoEstados.Select(he=> new HistoricoEstados()
@@ -197,71 +208,150 @@ namespace Juridico.Controllers
 
 
         // GET: Correspondencia/Create
-        public IActionResult Create()
+        public IActionResult Create(int? personaPresentoId, int? remitenteId)
         {
-
-            var anexos = _context.Anexos.ToList();
-            var anexosvm = new List<Anexo>();
-
-            foreach (var item in anexos)
+            //
+            var correspondenciaViewModel = new CorrespondenciaViewModel
             {
-                anexosvm.Add(new Anexo()
-                {
-                    Id = item.Id,
-                    Nombre = item.Nombre,
-                });
+                Codigo = $"{DateTime.Now.Year}-#####",
+                FechaIngreso = DateTime.Now,
+                FechaDocumento = DateTime.Now,
+            };
+            CargarDatos(personaPresentoId, remitenteId);
+            return View(correspondenciaViewModel);
+        }
 
-            }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(CorrespondenciaViewModel correspondenciaViewModel)
+        {
+            // Si el modelo no es válido
+            if (!ModelState.IsValid) return View();
+            // 
+            correspondenciaViewModel.IngresadoPorNombre = User.GetDisplayName();
+            var correspondencia = _mapper.Map<Correspondencia>(correspondenciaViewModel);
+            // agregar correlativo
+            correspondencia.Codigo = _correspondenciaService.GerenarCodigo();
+            _context.Correspondencias.Add(correspondencia);
+            _context.SaveChanges();
+            // Agregar nuevo estado
+            var accion = _context.Acciones.First(a => a.Codigo == "C000");
 
-            var correspondenciavm = new CorrespondenciaViewModel
+            var correspondenciaAccion = new AccionCorrespondenciaViewModel()
             {
-                Anexos = anexosvm,
+                AccionId = accion.Id,
+                CorrespondenciaId = correspondencia.Id,
+                Comentario = "Correspondencia ingresada correctamente",
             };
 
-            ViewData["EstadoActualId"] = new SelectList(_context.Estados, "Id", "Codigo");
-            ViewData["PersonaPresentoId"] = new SelectList(_context.Personas, "Id", "Apellidos");
-            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "Id", "Codigo");
-            ViewData["RegionalId"] = new SelectList(_context.Regionales, "Id", "Codigo");
-            ViewData["RemitenteId"] = new SelectList(_context.Remitentes, "Id", "NombreRemitente");
-
-            return View(correspondenciavm);
+            //
+            TempData.AlertSuccessMessage("Correspondencia ingresada correctamente.");
+            return RedirectToAction("Index");
 
         }
 
 
         // GET: Correspondencia/IngresarCorrespondencia
-
-        //public async Task<IActionResult>IngresarCorrespondencia(int? PersonaPresentoId, int? RemitenteId)
         public IActionResult IngresarCorrespondencia(int? PersonaPresentoId, int? RemitenteId)
         {
             var correspondenciavm = new CorrespondenciaViewModel
             {
                 FechaIngreso = DateTime.Now,
                 FechaDocumento = DateTime.Now,
-                //Anexos = anexosvm,
-                //Remitentes = remitentesvm,
-                //Personas = personas,
-                
             };
 
-          
-
+            
             if (RemitenteId != null)
             {
                 correspondenciavm.RemitenteId = RemitenteId.Value;
             }
-
 
             if (PersonaPresentoId != null)
             {
                 correspondenciavm.PersonaPresentoId = PersonaPresentoId.Value;
                 
             }
+
             correspondenciavm.Codigo = GenerarCorrelativoInicial();
 
            
             CargarDatos(PersonaPresentoId,RemitenteId);
             return View(correspondenciavm);
+        }
+
+        private void CargarDatos(int? PersonaPresentoId, int? RemitenteId)
+        {
+            var anexos = _context.Anexos
+                .Select(a => new Anexo()
+                {
+                    Id = a.Id,
+                    Nombre = a.Nombre
+                })
+                .ToList();
+
+            var remitentes = _context.Remitentes
+                .Select(r => new Remitente()
+                {
+                    Id = r.Id,
+                    NombreRemitente = r.NombreRemitente
+                })
+                .ToList();
+
+
+            List<Persona> personas;
+            if (PersonaPresentoId != null)
+            {
+                personas = _context.Personas
+                    .Select(x => new Persona
+                    {
+                        Id = x.Id,
+                        Nombres = $"{x.Dui} - {x.Nombres} {x.Apellidos}"
+                    })
+                    .Where(p => p.Id == PersonaPresentoId)
+                    .ToList();
+            }
+            else
+            {
+                personas = _context.Personas.Select(x => new Persona
+                {
+                    Id = x.Id,
+                    Nombres = $"{x.Dui} - {x.Nombres} {x.Apellidos}"
+                }).ToList();
+            }
+            ViewData["Personas"] = new SelectList(personas, "Id", "Nombres");
+
+
+            if (RemitenteId != null)
+            {
+                var remitente = _context.Remitentes.Select(x => new Remitente
+                {
+                    Id = x.Id,
+                    NombreRemitente = x.NombreRemitente,
+                })
+                  .Where(r => r.Id == RemitenteId)
+                  .ToList();
+                ViewData["Remitentes"] = new SelectList(remitente, "Id", "Nombres");
+            }
+            else
+            {
+                var remitente = _context.Remitentes.Select(x => new Remitente
+                {
+                    Id = x.Id,
+                    NombreRemitente = x.NombreRemitente,
+                })
+                   .ToList();
+                ViewData["Remitentes"] = new SelectList(remitente, "Id", "Nombres");
+            }
+            if (RemitenteId == null)
+            {
+                ViewData["Remitentes"] = new SelectList(remitentes, "Id", "NombreRemitente");
+            }
+
+            ViewData["Id_Anexos"] = new SelectList(anexos, "Id", "Nombre");
+            ViewData["TipoRemitente"] = new SelectList(_context.TiposRemitente, "Id", "Nombre");
+            ViewData["TipoEntidad"] = new SelectList(_context.TiposContacto, "Id", "Nombre");
+            ViewData["TipoDocumento"] = new SelectList(_context.TipoDocumentoRemitente, "Id", "NombreDocumentoRemitente");
+
         }
 
         private string GenerarCorrelativo()
@@ -287,93 +377,6 @@ namespace Juridico.Controllers
 
         }
 
-
-        private void CargarDatos(int? PersonaPresentoId, int? RemitenteId)
-        {
-            var anexos = _context.Anexos.ToList();
-            var anexosvm = new List<Anexo>();
-
-            foreach (var item in anexos)
-            {
-                anexosvm.Add(new Anexo()
-                {
-                    Id = item.Id,
-                    Nombre = item.Nombre,
-                });
-
-            }
-            //todos
-            
-            var remitentes = _context.Remitentes.ToList();
-            var remitentesvm = new List<Remitente>();
-            foreach (var item in remitentes)
-            {
-                remitentesvm.Add(new Remitente()
-                {
-                    Id = item.Id,
-                    NombreRemitente = item.NombreRemitente,
-
-                });
-            }
-            
-
-
-            if (PersonaPresentoId != null)
-            {
-                var personas = _context.Personas.Select(x => new Persona
-                {
-                    Id = x.Id,
-                    Nombres = $"{x.Dui} - {x.Nombres} {x.Apellidos}"
-                })
-                    .Where(p => p.Id == PersonaPresentoId)
-                    .ToList();
-                ViewData["Personas"] = new SelectList(personas, "Id", "Nombres");
-            }
-            else
-            {
-                var personas = _context.Personas.Select(x => new Persona
-                {
-                    Id = x.Id,
-                    Nombres = $"{x.Dui} - {x.Nombres} {x.Apellidos}"
-                }).ToList();
-                ViewData["Personas"] = new SelectList(personas, "Id", "Nombres");
-            }
-
-            if (RemitenteId != null)
-            {
-                var remitente = _context.Remitentes.Select(x => new Remitente
-                {
-                    Id = x.Id,
-                    NombreRemitente = x.NombreRemitente,
-                })
-                  .Where(r => r.Id == RemitenteId)
-                  .ToList();
-                ViewData["Remitentes"] = new SelectList(remitente, "Id", "Nombres");
-            }
-            else
-            {
-                var remitente = _context.Remitentes.Select(x => new Remitente
-                {
-                    Id = x.Id,
-                    NombreRemitente = x.NombreRemitente,
-                })
-                   .ToList();
-                ViewData["Remitentes"] = new SelectList(remitente, "Id", "Nombres");
-            }
-            if (RemitenteId == null)
-            {
-                ViewData["Remitentes"] = new SelectList(remitentesvm, "Id", "NombreRemitente");
-            }
-           
-            //ViewData["Remitentes"] = new SelectList(remitentesvm, "Id", "NombreRemitente");
-            //ViewData["Personas"] = new SelectList(personas, "Id", "Nombres");
-            ViewData["Id_Anexos"] = new SelectList(anexosvm, "Id", "Nombre");
-            ViewData["TipoRemitente"] = new SelectList(_context.TiposRemitente, "Id", "Nombre");
-            ViewData["TipoEntidad"] = new SelectList(_context.TiposContacto, "Id", "Nombre");
-            ViewData["TipoDocumento"] = new SelectList(_context.TipoDocumentoRemitente, "Id", "NombreDocumentoRemitente");
-
-        }
-     
         // POST: Correspondencia/IngresarCorrespondencia
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -398,8 +401,8 @@ namespace Juridico.Controllers
                 // Si el usuario está logueado guardar el id de empleado
                 if (_user.Identity.IsAuthenticated)
                 {
-                    var empleadoId = _context.DatosEmpleados.FirstOrDefault(de => de.UserId.Equals(_user.GetUserGraphId()))?.Id;
-                    correspondenciavm.IngresadoPorId = (int)empleadoId;
+                    //var empleadoId = _context.DatosEmpleados.FirstOrDefault(de => de.UserId.Equals(_user.GetUserGraphId()))?.Id;
+                    //correspondenciavm.IngresadoPorId = (int)empleadoId;
                 }
                 else
                 {
@@ -422,7 +425,8 @@ namespace Juridico.Controllers
                 RegionalId = 1,
                 ProcesoId = proceso.Id,
                 EstadoActualId =1,
-                IngresadoPorId = correspondenciavm.IngresadoPorId,
+                //IngresadoPorId = 0,
+                //IngresadoPorId = correspondenciavm.IngresadoPorId,
 
             };
                    //_mapper.Map<Correspondencia>(correspondenciavm);

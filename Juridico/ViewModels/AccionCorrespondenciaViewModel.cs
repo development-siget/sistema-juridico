@@ -21,6 +21,8 @@ namespace Juridico.ViewModels
 
         public int? DatosEmpleadoId { get; set; }
 
+        public string NombreUsuario { get; set; }
+
         public int? EstadoActualId { get; set; }
 
         public int? EstadoSiguientId { get; set; }

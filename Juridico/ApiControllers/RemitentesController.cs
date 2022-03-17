@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Juridico.Data;
 using Juridico.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Juridico.ApiControllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class RemitentesController : ControllerBase
@@ -20,54 +22,41 @@ namespace Juridico.ApiControllers
             _context = context;
         }
 
-
-        [HttpGet("Search")]
-        public IActionResult Buscar(string term)
-        {
-            //var remitentes = _context.Remitentes.Where(x => x.NombreRemitente.Contains(cadena)).ToList();
-
-            var remitenteslist = _context.Remitentes.ToList();
-
-            //si parametro tiene dato
-            if (term != null)
-            {
-               
-                //busco dato filtrado
-                remitenteslist = _context.Remitentes.Where(x => x.NombreRemitente.Contains(term)).ToList();
-
-                
-
-            }
-
-            var remitentes= remitenteslist.Select(d => new
-            {
-                id = d.Id,
-                text = $"{d.NombreRemitente}"
-            });
-            return Ok(remitentes);
-        }
-
-
-        // GET api/<RemitentesController>/5
-        [HttpGet("Formulario/{id}")]
-        public IActionResult GetDatosFormulario(int id)
+        [HttpGet]
+        public IActionResult GetList(string search)
         {
             var remitentes = _context.Remitentes
-                .Select(x => new Remitente()
+                .Select(r => new Remitente()
                 {
-                    Id = x.Id,
-                    NombreRemitente = x.NombreRemitente,
+                    Id = r.Id,
+                    NombreRemitente = r.NombreRemitente
                 })
-                .FirstOrDefault(x => x.Id == id);
-
-
-
-            //.Where(x => x.Id == id);
-
-
+                .ToList();
             return Ok(remitentes);
         }
 
+        [HttpGet("Search/{search}")]
+        public IActionResult GetListSearch(string search)
+        {
+            var remitentes = _context.Remitentes
+                .Select(r => new Remitente()
+                {
+                    Id = r.Id,
+                    NombreRemitente = r.NombreRemitente
+                })
+                .Where(r => search == null || r.NombreRemitente.Contains(search))
+                .ToList();
+            return Ok(remitentes);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var remitente = _context.Remitentes
+                .FirstOrDefault(r => r.Id == id);
+            if (remitente == null) return NotFound();
+            return Ok(remitente);
+        }
 
     }
 }

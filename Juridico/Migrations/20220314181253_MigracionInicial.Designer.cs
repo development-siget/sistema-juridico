@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juridico.Migrations
 {
     [DbContext(typeof(JuridicoDbContext))]
-    [Migration("20220302182011_MigracionInicial")]
+    [Migration("20220314181253_MigracionInicial")]
     partial class MigracionInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,8 +165,8 @@ namespace Juridico.Migrations
                     b.Property<DateTime>("FechaIngreso")
                         .HasColumnType("date");
 
-                    b.Property<int>("IngresadoPorId")
-                        .HasColumnType("int");
+                    b.Property<string>("IngresadoPorNombre")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Objeto")
                         .IsRequired()
@@ -262,6 +262,26 @@ namespace Juridico.Migrations
                     b.HasIndex("RolId");
 
                     b.ToTable("DatosEmpleados");
+                });
+
+            modelBuilder.Entity("Juridico.Models.EmpleadosRequerimiento", b =>
+                {
+                    b.Property<int>("DatosEmpleadosId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequerimientoId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("DatosEmpleadosId", "RequerimientoId");
+
+                    b.HasIndex("RequerimientoId");
+
+                    b.ToTable("EmpleadosRequerimiento");
                 });
 
             modelBuilder.Entity("Juridico.Models.Estado", b =>
@@ -856,6 +876,21 @@ namespace Juridico.Migrations
                     b.HasOne("Juridico.Models.Rol", "Rol")
                         .WithMany()
                         .HasForeignKey("RolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Juridico.Models.EmpleadosRequerimiento", b =>
+                {
+                    b.HasOne("Juridico.Models.DatosEmpleado", "DatosEmpleado")
+                        .WithMany("Requerimientos")
+                        .HasForeignKey("DatosEmpleadosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Juridico.Models.Requerimiento", "Requerimiento")
+                        .WithMany("DatosEmpleados")
+                        .HasForeignKey("RequerimientoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

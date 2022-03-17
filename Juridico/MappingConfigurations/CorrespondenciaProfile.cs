@@ -12,7 +12,8 @@ namespace Juridico.MappingConfigurations
     {
         public CorrespondenciaProfile()
         {
-            CreateMap<Correspondencia, CorrespondenciaViewModel>();
+            CreateMap<Correspondencia, CorrespondenciaViewModel>()
+                .ReverseMap();
                 //.ForPath(x => x.HistoricoEstados, x => x.Ignore()); 
         }
 

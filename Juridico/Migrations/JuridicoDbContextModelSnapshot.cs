@@ -163,8 +163,8 @@ namespace Juridico.Migrations
                     b.Property<DateTime>("FechaIngreso")
                         .HasColumnType("date");
 
-                    b.Property<int>("IngresadoPorId")
-                        .HasColumnType("int");
+                    b.Property<string>("IngresadoPorNombre")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Objeto")
                         .IsRequired()

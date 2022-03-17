@@ -304,6 +304,31 @@ namespace Juridico.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmpleadosRequerimiento",
+                columns: table => new
+                {
+                    DatosEmpleadosId = table.Column<int>(nullable: false),
+                    RequerimientoId = table.Column<int>(nullable: false),
+                    isDeleted = table.Column<bool>(nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmpleadosRequerimiento", x => new { x.DatosEmpleadosId, x.RequerimientoId });
+                    table.ForeignKey(
+                        name: "FK_EmpleadosRequerimiento_DatosEmpleados_DatosEmpleadosId",
+                        column: x => x.DatosEmpleadosId,
+                        principalTable: "DatosEmpleados",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmpleadosRequerimiento_Requerimientos_RequerimientoId",
+                        column: x => x.RequerimientoId,
+                        principalTable: "Requerimientos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Acciones",
                 columns: table => new
                 {
@@ -379,7 +404,7 @@ namespace Juridico.Migrations
                     FechaDocumento = table.Column<DateTime>(type: "date", nullable: false),
                     FechaFinalizacion = table.Column<DateTime>(type: "date", nullable: true),
                     EstadoActualId = table.Column<int>(nullable: true),
-                    IngresadoPorId = table.Column<int>(nullable: false),
+                    IngresadoPorNombre = table.Column<string>(nullable: true),
                     RemitenteId = table.Column<int>(nullable: false),
                     PersonaPresentoId = table.Column<int>(nullable: false),
                     RegionalId = table.Column<int>(nullable: false),
@@ -598,6 +623,11 @@ namespace Juridico.Migrations
                 column: "RolId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmpleadosRequerimiento_RequerimientoId",
+                table: "EmpleadosRequerimiento",
+                column: "RequerimientoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Estados_ProcesoId",
                 table: "Estados",
                 column: "ProcesoId");
@@ -655,7 +685,7 @@ namespace Juridico.Migrations
                 name: "CorrespondenciaRequerimiento");
 
             migrationBuilder.DropTable(
-                name: "DatosEmpleados");
+                name: "EmpleadosRequerimiento");
 
             migrationBuilder.DropTable(
                 name: "EstadosRoles");
@@ -673,16 +703,19 @@ namespace Juridico.Migrations
                 name: "HistoricoEstados");
 
             migrationBuilder.DropTable(
-                name: "Requerimientos");
+                name: "DatosEmpleados");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Requerimientos");
 
             migrationBuilder.DropTable(
                 name: "Acciones");
 
             migrationBuilder.DropTable(
                 name: "Correspondencias");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "TiposAccion");
